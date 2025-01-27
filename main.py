@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, session, g
 import sqlite3
 import hashlib
 from datetime import datetime
+from capcha import generate_captcha
 from config import *
 from db import create_table_users
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
