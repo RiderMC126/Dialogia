@@ -8,23 +8,26 @@
 </head>
 <body>
     <div class="container">
-        <form class="registration-form">
+        <form class="registration-form" method="POST" action="{{ url_for('register') }}">
             <h2 style="color: #691169;">Dialogia</h2>
             <h2>Регистрация</h2>
+            {% if error %}
+            <div class="error-message">{{ error }}</div>
+            {% endif %}
             <div class="input-group">
-                <input type="text" id="username" required>
+                <input maxlength="24" minlength="4" name="username" type="text" id="username" required>
                 <label for="username">Имя пользователя</label>
             </div>
             <div class="input-group">
-                <input type="email" id="email" required>
+                <input name="email" type="email" id="email" required>
                 <label for="email">Email</label>
             </div>
             <div class="input-group">
-                <input type="password" id="password" required>
+                <input minlength="8" name="password" type="password" id="password" required>
                 <label for="password">Пароль</label>
             </div>
             <div class="input-group">
-                <input type="password" id="confirm-password" required>
+                <input minlength="8" name="confirm-password" type="password" id="confirm-password" required>
                 <label for="confirm-password">Подтвердите пароль</label>
             </div>
             <button type="submit">Зарегистрироваться</button>
