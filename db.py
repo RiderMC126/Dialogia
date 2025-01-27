@@ -14,6 +14,7 @@ def create_table_users():
     username TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'Пользователь',
     date DATE NOT NULL DEFAULT CURRENT_DATE,
     blocked TEXT NOT NULL DEFAULT 'NO'
     );

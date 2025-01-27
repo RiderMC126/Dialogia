@@ -95,7 +95,7 @@ def register():
                 # Добавление нового пользователя в базу данных
                 current_date = datetime.now().strftime("%Y-%m-%d")
                 g.db.execute("""
-                    INSERT INTO users (username, password, email, date, blocked)
+                    INSERT INTO users (username, password, email ,date, blocked)
                     VALUES (?, ?, ?, ?, ?)
                 """, (username, hashed_password, email, current_date, "NO"))
                 g.db.commit()
