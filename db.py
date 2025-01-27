@@ -12,6 +12,7 @@ def create_table_users():
             id INTEGER PRIMARY KEY,
             username TEXT,
             password TEXT,
+            email TEXT,
             date DATE NOT NULL DEFAULT CURRENT_DATE,
             blocked TEXT NOT NULL DEFAULT NO
         );
