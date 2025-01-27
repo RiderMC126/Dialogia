@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль аккаунта</title>
+    <link rel="stylesheet" href="/static/css/profile.css">
+</head>
+<body>
+    <div class="container">
+        <div class="profile-form">
+            <h2>Профиль аккаунта</h2>
+            <div class="avatar-container">
+                <img src="https://via.placeholder.com/150" alt="Аватар пользователя" class="avatar" id="avatar">
+            </div>
+            <button onclick="toggleBlock('avatar-change')">Сменить аватарку</button>
+            <div id="avatar-change" class="input-group hidden">
+                <input type="file" id="avatar-upload" accept="image/*">
+                <button onclick="changeAvatar()" class="confirm-button">Подтвердить смену аватара</button>
+            </div>
+            <button onclick="toggleBlock('login-change')">Сменить логин</button>
+            <div id="login-change" class="input-group hidden">
+                <input type="text" id="new-login" required>
+                <label for="new-login">Новый логин</label>
+                <button onclick="changeLogin()" class="confirm-button">Подтвердить смену логина</button>
+            </div>
+            <button onclick="toggleBlock('password-change')">Сменить пароль</button>
+            <div id="password-change" class="input-group hidden">
+                <input type="password" id="new-password" required>
+                <label for="new-password">Новый пароль</label>
+                <button onclick="changePassword()" class="confirm-button">Подтвердить смену пароля</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleBlock(blockId) {
+            const block = document.getElementById(blockId);
+            block.classList.toggle('hidden');
+        }
+
+        function changeAvatar() {
+            const fileInput = document.getElementById('avatar-upload');
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatar').src = e.target.result;
+                    alert('Аватар успешно изменен');
+                }
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                alert('Пожалуйста, выберите файл');
+            }
+        }
+
+        function changeLogin() {
+            const newLogin = document.getElementById('new-login').value;
+            if (newLogin) {
+                alert('Логин успешно изменен на: ' + newLogin);
+                // Здесь должна быть логика для отправки нового логина на сервер
+            } else {
+                alert('Пожалуйста, введите новый логин');
+            }
+        }
+
+        function changePassword() {
+            const newPassword = document.getElementById('new-password').value;
+            if (newPassword) {
+                alert('Пароль успешно изменен');
+                // Здесь должна быть логика для отправки нового пароля на сервер
+            } else {
+                alert('Пожалуйста, введите новый пароль');
+            }
+        }
+    </script>
+</body>
+</html>
