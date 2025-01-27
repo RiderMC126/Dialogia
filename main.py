@@ -36,7 +36,7 @@ def index():
 
 @app.route('/signin', methods=['GET', 'POST'])
 def login():
-    title = "Вход"
+    title = "Sign In"
     error = None
     if request.method == 'POST':
         username = request.form['username']
@@ -61,7 +61,7 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
-    title = "Регистрация"
+    title = "Sign Up"
     error = None
     if request.method == 'POST':
         username = request.form['username']
