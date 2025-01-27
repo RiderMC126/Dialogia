@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #0a0a0a; /* Более темный фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.registration-form {
+    background-color: #1a1a1a; /* Немного светлее, чем фон body */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 300;
+    font-size: 28px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-bottom: 1px solid #444;
+    outline: none;
+    background: transparent;
+    transition: 0.3s;
+}
+
+label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #888;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+input:focus ~ label,
+input:valid ~ label {
+    top: -20px;
+    font-size: 12px;
+    color: #4CAF50;
+}
+
+input:focus {
+    border-bottom: 1px solid #4CAF50;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
