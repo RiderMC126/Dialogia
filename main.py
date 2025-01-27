@@ -1,10 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+import sqlite3
 from config import *
+from db import create_table_users
+
+
+conn = sqlite3.connect("db.db")
+cur = conn.cursor()
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = 'static/images/'
+create_table_users()
 
 
 @app.route('/')
