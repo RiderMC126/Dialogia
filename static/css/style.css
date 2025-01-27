@@ -30,7 +30,8 @@ nav ul {
 nav ul li a {
     color: white;
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    margin-right: -5px;
+    margin-left: -5px;
     border-radius: 4px;
     /* Плавное изменение цвета при наведении */
     transition: background-color 0.3s;
@@ -39,59 +40,9 @@ nav ul li a {
 nav ul li a:hover {
     background-color: #34495e;
 }
-/* Стили для основного содержимого */
-main {
-    padding: 2rem;
-}
-/* Стили для блока форума */
-.forum-block {
-    background-color: white;
-    border-radius: 8px;
-    padding: 2rem;
-     /* Тень для визуального выделения */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-/* Стили для заголовка форума */
-h1 {
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-}
-/* Стили для контейнера кнопок форума */
-.forum-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-/* Стили для кнопок */
-.button {
-    display: inline-block;
-    background-color: #132e3f;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: 4px;
-    /* Плавное изменение цвета при наведении */
-    transition: background-color 0.3s;
-    text-align: center;
-}
 
-.button:hover {
-    /* Цвет кнопок при наведении */
-    background-color: #2980b9;
-}
-/* Стили для контейнера кнопок чата */
-.Chat-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-/* Стили для блока чата */
-.Chat-block {
-    background-color: white;
-    border-radius: 8px;
-    padding: 0.2rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
+
+
 
 
 
