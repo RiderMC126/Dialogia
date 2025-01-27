@@ -9,7 +9,8 @@ app.config['UPLOAD_FOLDER'] = 'static/images/'
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    title = 'Dialogia'
+    return render_template("index.html", title=title)
 
 
 if __name__ == '__main__':
