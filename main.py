@@ -67,16 +67,18 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
-    title = "Sign Up"
+    title = "Регистрация"
     error = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         confirm_password = request.form['confirm-password']
         email = request.form['email']
+        captcha = request.form['captcha']
 
-        # Проверка введенных данных
-        if not username or not password or not email:
+        if captcha != session['captcha']:
+            error = "Неверный код капчи."
+        elif not username or not password or not email:
             error = "Все поля обязательны для заполнения."
         elif password != confirm_password:
             error = "Пароли не совпадают."
@@ -100,6 +102,9 @@ def register():
 
                 # Перенаправление на страницу входа после успешной регистрации
                 return redirect(url_for('login'))
+    # Генерация новой капчи
+    captcha_text, _ = generate_captcha()
+    session['captcha'] = captcha_text
 
     return render_template("register.html", title=title, error=error)
 
@@ -115,6 +120,12 @@ def inject_user():
     if 'user_id' in session:
         user = session['username']
     return dict(user=user)
+
+@app.route('/refresh_captcha')
+def refresh_captcha():
+    captcha_text, _ = generate_captcha()
+    session['captcha'] = captcha_text
+    return redirect(url_for('register'))
 
 
 

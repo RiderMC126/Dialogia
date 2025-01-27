@@ -30,6 +30,12 @@
                 <input minlength="8" name="confirm-password" type="password" id="confirm-password" required>
                 <label for="confirm-password">Подтвердите пароль</label>
             </div>
+            <div class="input-group">
+                <img src="{{ url_for('static', filename='images/captcha.jpg') }}" alt="Капча">
+                <a style="" href="{{ url_for('refresh_captcha') }}">Обновить</a>
+                <input placeholder="Введите код с картинки" name="captcha" type="text" id="captcha" required>
+
+            </div>
             <button type="submit">Зарегистрироваться</button>
         </form>
     </div>
