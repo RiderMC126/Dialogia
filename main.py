@@ -31,7 +31,11 @@ create_table_users()
 @app.route('/')
 def index():
     title = 'Dialogia'
-    return render_template("index.html", title=title)
+    user = None
+    if 'user_id' in session:
+        user = session['username']
+    return render_template("index.html", title=title, user=user)
+
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -96,6 +100,21 @@ def register():
                 return redirect(url_for('login'))
 
     return render_template("register.html", title=title, error=error)
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('username', None)
+    return redirect(url_for('index'))
+
+@app.context_processor
+def inject_user():
+    user = None
+    if 'user_id' in session:
+        user = session['username']
+    return dict(user=user)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,12 +1,16 @@
 <header>
-    <!-- Логотип типо -->
     <div class="logo">Dialogia</div>
-    <!-- меню навигации сверху которое -->
     <nav>
         <ul>
-            <li><a href="/signin">Войти</a></li>
-            <li><a class="slash">/</a></li>
-            <li><a style="margin-right: 15px" href="/signup">Зарегистрироваться</a></li>
+            {% if user %}
+                <li><a href="/profile">{{ user }}</a></li>
+                <li><a class="slash">/</a></li>
+                <li><a style="margin-right: 15px" href="{{ url_for('logout') }}">Выйти</a></li>
+            {% else %}
+                <li><a href="{{ url_for('login') }}">Войти</a></li>
+                <li><a class="slash">/</a></li>
+                <li><a style="margin-right: 15px" href="{{ url_for('register') }}">Зарегистрироваться</a></li>
+            {% endif %}
         </ul>
     </nav>
 </header>
