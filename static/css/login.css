@@ -8,18 +8,14 @@
     box-sizing: border-box;
 }
 
-/* Стили для body */
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #0a0a0a; /* Темный фон */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
+
 
 /* Стили для основного контейнера */
 .container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
     max-width: 400px;
     padding: 20px;
@@ -102,4 +98,8 @@ button {
 /* Стили для кнопки при наведении */
 button:hover {
     background-color: #45a049;
+}
+
+.error-message {
+    color: red;
 }

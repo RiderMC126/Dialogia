@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/static/css/login.css">
+    <link rel="stylesheet" href="/static/css/header.css">
 </head>
 <body>
+{% include 'header.html' %}
     <div class="container">
         <form class="login-form" method="POST" action="{{ url_for('login') }}">
             <h2 style="color: #691169;">Dialogia</h2>
