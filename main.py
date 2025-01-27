@@ -13,5 +13,16 @@ def index():
     return render_template("index.html", title=title)
 
 
+@app.route('/signin', methods=['GET', 'POST'])
+def login():
+    title = "Sign In"
+    return render_template("login.html", title=title)
+
+@app.route('/signup', methods=['GET', 'POST'])
+def register():
+    title = "Sign Up"
+    return render_template("login.html", title=title)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
