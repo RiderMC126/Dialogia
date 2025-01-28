@@ -14,6 +14,6 @@
   <li>Перенесите ngrok в удобное вам место</li>
   <li>Запускате main.py</li>
   <li>Запускаете ngrok</li>
-  <li>Вводите свой токен: ngrok config add-authtoken <token></li>
+  <li>Вводите свой токен: <blockquote>ngrok config add-authtoken <token></blockquote></li>
   <li>Запускаете сервер: <blockquote>ngrok http 5000</blockquote></li>
 </ol>
