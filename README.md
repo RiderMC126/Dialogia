@@ -9,7 +9,7 @@
   <li>Перенести папку Dialogia в нужное Вам место.</li>
   <li>В адресной строке введите cmd и нажмите Enter.</li>
   <img src="https://i.ibb.co/5BnDbh6/photo-2025-01-28-13-37-15.jpg">
-  <li>В открывшейся командной строке введите <blockquote>pip install -U -r requirements.txt</blockquote>. Дождитесь окончания загрузки пакетов.</li>
+  <li>В открывшейся командной строке введите <blockquote>pip install -U -r requirements.txt</blockquote></li>
   <li>Скачайте <a href="https://download.ngrok.com/downloads/windows?tab=download">ngrok</a></li>
   <li>Перенесите ngrok в удобное вам место</li>
   <li>Запускате main.py</li>
