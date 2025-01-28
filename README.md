@@ -1,1 +1,1 @@
-<h3>Dialogia</h4>
+<h1>Dialogia</h1>
