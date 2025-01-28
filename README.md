@@ -2,8 +2,8 @@
 
 
 # ⬇️ Установка
-<ul type="1">
+<ol type="1">
   <li>1</li>
   <li>1</li>
   <li>1</li>
-</ul>
+</ol>
