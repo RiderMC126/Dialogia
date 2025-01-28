@@ -10,4 +10,10 @@
   <li>В адресной строке введите cmd и нажмите Enter.</li>
   <img src="https://i.ibb.co/5BnDbh6/photo-2025-01-28-13-37-15.jpg">
   <li>В открывшейся командной строке введите pip install -U -r requirements.txt. Дождитесь окончания загрузки пакетов.</li>
+  <li>Скачайте <a href="https://download.ngrok.com/downloads/windows?tab=download">ngrok</a></li>
+  <li>Перенесите ngrok в удобное вам место</li>
+  <li>Запускате main.py</li>
+  <li>Запускаете ngrok</li>
+  <li>Вводите свой токен: ngrok config add-authtoken <token></li>
+  <li>Запускаете сервер: ngrok http 5000</li>
 </ol>
