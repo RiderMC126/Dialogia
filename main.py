@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g
+from http.server import HTTPServer, BaseHTTPRequestHandler
 import sqlite3
 import hashlib
 from datetime import datetime
@@ -6,6 +7,8 @@ from capcha import generate_captcha
 from config import *
 from db import create_table_users
 import os
+import logging
+import ngrok
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
@@ -94,19 +97,28 @@ def register():
 
                 # Добавление нового пользователя в базу данных
                 current_date = datetime.now().strftime("%Y-%m-%d")
-                g.db.execute("""
-                    INSERT INTO users (username, password, email ,date, blocked)
+                cur = g.db.execute("""
+                    INSERT INTO users (username, password, email, date, blocked)
                     VALUES (?, ?, ?, ?, ?)
                 """, (username, hashed_password, email, current_date, "NO"))
                 g.db.commit()
 
-                # Перенаправление на страницу входа после успешной регистрации
-                return redirect(url_for('login'))
+                # Получение ID нового пользователя
+                user_id = cur.lastrowid
+
+                # Создание сессии для нового пользователя
+                session['user_id'] = user_id
+                session['username'] = username
+
+                # Перенаправление на главную страницу после успешной регистрации
+                return redirect(url_for('index'))
+
     # Генерация новой капчи
     captcha_text, _ = generate_captcha()
     session['captcha'] = captcha_text
 
     return render_template("register.html", title=title, error=error)
+
 
 @app.route('/logout')
 def logout():
