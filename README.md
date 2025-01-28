@@ -8,4 +8,5 @@
   <li>Скачайте <a href="https://github.com/RiderMC126/Dialogia/archive/refs/heads/main.zip">Dialogia</a></li>
   <li>Перенести папку Dialogia в нужное Вам место.</li>
   <li>В адресной строке введите cmd и нажмите Enter.</li>
+  <img src="https://ibb.co/jgWKnkT">
 </ol>
