@@ -1,1 +1,1 @@
-<div style="color='blue'">Dialogia</div>
+<h3>Dialogia</h4>
