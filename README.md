@@ -9,4 +9,5 @@
   <li>Перенести папку Dialogia в нужное Вам место.</li>
   <li>В адресной строке введите cmd и нажмите Enter.</li>
   <img src="https://i.ibb.co/5BnDbh6/photo-2025-01-28-13-37-15.jpg">
+  <li>В открывшейся командной строке введите pip install -U -r requirements.txt. Дождитесь окончания загрузки пакетов.</li>
 </ol>
