@@ -85,7 +85,7 @@
 .forums_box {
     position: relative;
     display: block;
-    background: #34495e;
+    background: #1a1a1a;
     width: 80%;
     min-height: 500px;
     top: 50%;
@@ -94,6 +94,7 @@
     margin-bottom: 100px;
     max-height: 2000px;
     text-decoration: none;
+    border-radius: 12px;
 }
 
 .forum-header {
