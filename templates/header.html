@@ -3,7 +3,7 @@
     <nav>
         <ul>
             {% if session.logged_in %}
-                <li><a href="/profile">{{ session.username }}</a></li>
+                <li><a class="login"  href="{{ url_for('profile', username=session['username']) }}">{{ session.username }}</a></li>
                 <li><a class="slash">/</a></li>
                 <li><a style="margin-right: 15px" href="{{ url_for('logout') }}">Выйти</a></li>
             {% else %}

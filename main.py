@@ -228,6 +228,38 @@ def send_post():
     except sqlite3.Error as e:
         return 'Ошибка отправки поста: ' + str(e)
 
+@app.route('/members/<username>')
+def profile(username):
+    update_online()
+    conn = sqlite3.connect('db.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT avatar, last_online FROM users WHERE login=?', (username,))
+    user_data = cursor.fetchone()
+    if user_data is not None:
+        avatar = user_data[0]
+        last_online_time = user_data[1]
+        if username == session['username']:
+            cursor.execute('UPDATE users SET last_online=? WHERE login=?',
+                           (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), username))
+            conn.commit()
+        last_online_time = datetime.datetime.strptime(last_online_time, '%Y-%m-%d %H:%M:%S')
+        last_online_time = pytz.utc.localize(last_online_time).astimezone(pytz.timezone('Europe/Moscow'))
+        now = pytz.timezone('Europe/Moscow').localize(datetime.datetime.now())
+        time_diff = now - last_online_time
+        if time_diff < datetime.timedelta(minutes=5):
+            last_online = "в сети"
+        elif time_diff < datetime.timedelta(hours=1):
+            last_online = f"Был в сети {time_diff.seconds // 60} минут назад"
+        elif time_diff < datetime.timedelta(days=1):
+            last_online = f"Был в сети {time_diff.seconds // 3600} часов назад"
+        else:
+            last_online = f"Был в сети {time_diff.days} дней назад"
+    else:
+        avatar = 'avatar_none.png'
+        last_online = None
+    conn.close()
+    return render_template('profile.html', username=username, avatar=avatar, last_online=last_online)
+
 @app.route('/logout')
 def logout():
     update_online()
