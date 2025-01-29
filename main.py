@@ -39,13 +39,27 @@ def update_online():
         conn.commit()
         conn.close()
 
-@app.route('/')
+@app.route("/")
 def index():
-    title = 'Dialogia'
-    user = None
-    if 'user_id' in session:
-        user = session['username']
-    return render_template("index.html", title=title, user=user)
+    update_online()
+    title = "Dialogia"
+    conn = sqlite3.connect('db.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM categories')
+    rows = cursor.fetchall()
+    categories = []
+    for row in rows:
+        category = {'id': row[0], 'name': row[1]}
+        cursor.execute('SELECT * FROM forums WHERE category_id=?', (row[0],))
+        forums_rows = cursor.fetchall()
+        forums = []
+        for forum_row in forums_rows:
+            forum = {'id': forum_row[0], 'name': forum_row[2]}
+            forums.append(forum)
+        category['forums'] = forums
+        categories.append(category)
+    conn.close()
+    return render_template("index.html", title=title, categories=categories)
 
 
 
@@ -131,7 +145,88 @@ def register():
                 session['captcha_text'] = captcha_text
     return render_template('register.html', title=title, error=error)
 
+@app.route('/category/<int:category_id>')
+def category(category_id):
+    update_online()
+    conn = sqlite3.connect('db.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM categories WHERE id=?', (category_id,))
+    category = cursor.fetchone()
+    cursor.execute('SELECT * FROM forums WHERE category_id=?', (category_id,))
+    forums = cursor.fetchall()
+    cursor.execute('SELECT * FROM threads WHERE forum_id IN (SELECT id FROM forums WHERE category_id=?)', (category_id,))
+    threads = cursor.fetchall()
+    conn.close()
+    return render_template('category.html', category=category, forums=forums, threads=threads)
 
+@app.route('/forum/<int:forum_id>')
+def forum(forum_id):
+    update_online()
+    conn = sqlite3.connect("db.db")
+    cursor = conn.cursor()
+    cursor.execute('PRAGMA table_info(forums)')
+    cursor.execute('SELECT * FROM forums WHERE id=?', (forum_id,))
+    forum_data = cursor.fetchone()
+    cursor.execute('SELECT * FROM threads WHERE forum_id=?', (forum_id,))
+    threads = cursor.fetchall()
+    conn.close()
+    if forum_data is None:
+        return 'Форум не найден'
+    else:
+        return render_template('forum.html', forum=forum_data, threads=threads)
+
+@app.route('/thread/<int:thread_id>')
+def thread(thread_id):
+    update_online()
+    conn = sqlite3.connect("db.db")
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM threads WHERE id=?', (thread_id,))
+    thread_data = cursor.fetchone()
+
+    cursor.execute('''
+        SELECT p.content, p.name, p.created_at, u.avatar
+        FROM posts p
+        LEFT JOIN users u ON p.user_id = u.login
+        WHERE p.thread_id = ?
+    ''', (thread_id,))
+    posts = cursor.fetchall()
+
+    print("Посты:", posts)  # Отладка
+
+    hashed_login = hashlib.sha256(session['username'].encode()).hexdigest()
+    cursor.execute('SELECT avatar FROM users WHERE login=?', (hashed_login,))
+    avatar = cursor.fetchone()
+    if avatar is not None and avatar[0] is not None:
+        avatar = avatar[0]
+    else:
+        avatar = 'avatar_none.png'
+    conn.close()
+
+    if thread_data is None:
+        return 'Тема не найдена'
+    else:
+        return render_template('thread.html', thread=thread_data, posts=posts, avatar=avatar,
+                               username=session['username'])
+
+@app.route('/send_post', methods=['POST'])
+def send_post():
+    update_online()
+    post = request.form['post']
+    thread_id = request.args.get('thread_id')
+    try:
+        conn = sqlite3.connect("db.db")
+        cursor = conn.cursor()
+        hashed_login = hashlib.sha256(session['username'].encode()).hexdigest()
+        utc_time = datetime.datetime.utcnow()
+        local_time = utc_time.astimezone(pytz.timezone('Europe/Moscow'))  # Московское время с DST
+        local_time = local_time + datetime.timedelta(hours=3)  # Добавить 3 часа
+        local_time = local_time.strftime('%Y-%m-%d %H:%M:%S')
+        cursor.execute('INSERT INTO posts (thread_id, user_id, content, name, created_at) VALUES (?, ?, ?, ?, ?)', (thread_id, hashed_login, post, session['username'], local_time))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('thread', thread_id=thread_id))
+    except sqlite3.Error as e:
+        return 'Ошибка отправки поста: ' + str(e)
 
 @app.route('/logout')
 def logout():

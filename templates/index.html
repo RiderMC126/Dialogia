@@ -12,21 +12,23 @@
 <body>
     {% include 'header.html' %}
     <!-- Основа страницы, что и для чего -->
-    <div class="forum-block">
-        <h2 class="forum-title">Forum</h2>
-        <div class="button-container">
-          <button class="forum-button">Помощь</button>
-          <button class="forum-button">Реклама</button>
-          <button class="forum-button">Идеи предложения</button>
+    {% for category in categories %}
+    <div class="forums_box">
+    <div class="forum-header">
+        <a href="{{ url_for('category', category_id=category.id) }}">
+            <div class="forum-text">{{ category.name }}</div>
+        </a>
+        <hr>
+    </div>
+    <div class="line"></div>
+    {% for forum in category.forums %}
+    <a href="{{ url_for('forum', forum_id=forum.id) }}">
+        <div class="forumname-text">{{ forum.name }}</div>
+    </a>
+    {% endfor %}
+</div>
 
-          <div class="Chat-block">
-            <h2 class="Chat-title">Обсуждение</h2>
-            <div class="Chat-container">
-              <button class="Chat-button">Общение на любую тему</button>
-              <button class="Chat-button">Открытые темы</button>
-              <button class="Chat-button">Создать свою тему для обсуждений</button>
-        </div>
-      </div>
+{% endfor %}
       
 </body>
 </html>

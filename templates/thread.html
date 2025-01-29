@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/threads.css">
+    <title>{{ thread[2] }}</title>
+</head>
+<body>
+{% include 'header.html' %}
+
+<div class="thread_box">
+    <h1 style="border-bottom: black solid 3px">{{ thread[2] }}</h1>
+    {% for post in posts %}
+    <div class="post_box">
+        <img class="post_avatar" src="{{ url_for('static', filename='images/' + post[1]) }}" alt="Аватарка">
+        <p class="post-nickname">{{ post[1] }}</p>
+        <p class="post-text">{{ post[0] }}</p>
+        <p class="post-time">{{ post[2] }}</p>
+    </div>
+    {% endfor %}
+    <form action="{{ url_for('send_post', thread_id=thread[0]) }}" method="post">
+    <div class="input_chat">
+        <img class="input_src" src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка" style="width: 150px; height: 150px; border-radius: 50%; margin-right: 10px;">
+        <textarea class="post-textarea" name="post" placeholder="Введите свой пост"></textarea>
+        <button class="input_btn">Отправить</button>
+    </div>
+    </form>
+</div>
+
+<script src="../static/js/send_post.js"></script>
+
+</body>
+</html>
