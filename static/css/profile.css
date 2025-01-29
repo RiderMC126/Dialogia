@@ -11,116 +11,211 @@
 /* Основные стили для body */
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #0a0a0a; /* Темный фон */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: #0a0a0a;
+    color: #ffffff;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Контейнер для центрирования и ограничения ширины содержимого */
 .container {
-    width: 100%;
-    max-width: 400px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
     padding: 20px;
+    padding-top: 90px;
 }
 
-/* Стили для формы профиля */
-.profile-form {
-    background-color: #1a1a1a; /* Темный фон формы */
-    padding: 40px;
+/* Стили для основного контента */
+.content {
+    background-color: #1a1a1a;
+    width: 110%;
+    height: 10vh;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Стили для заголовка */
-h2 {
-    color: #ffffff;
-    text-align: center;
-    margin-bottom: 30px;
-    font-weight: 300;
-    font-size: 28px;
-}
-
-/* Стили для контейнера аватара */
-.avatar-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Стили для изображения аватара */
-.avatar {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #4CAF50;
-}
-
-/* Стили для группы ввода */
-.input-group {
-    position: relative;
-    margin-bottom: 30px;
-}
-
-/* Стили для полей ввода */
-input {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #fff;
-    border: none;
-    border-bottom: 1px solid #444;
-    outline: none;
-    background: transparent;
-    transition: 0.3s;
-}
-
-/* Стили для меток полей ввода */
-label {
-    position: absolute;
+/* Стили для верхнего блока */
+.top-bar {
+    position: fixed;
     top: 0;
     left: 0;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #888;
-    pointer-events: none;
-    transition: 0.3s;
+    width: 100%;
+    background-color: #1a1a1a;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 1000;
 }
 
-/* Анимация меток при фокусе или заполнении поля */
-input:focus ~ label,
-input:valid ~ label {
-    top: -20px;
-    font-size: 12px;
+.top-bar a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 20px;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.top-bar a:hover {
     color: #4CAF50;
 }
 
-/* Подсветка нижней границы поля при фокусе */
-input:focus {
-    border-bottom: 1px solid #4CAF50;
+
+/* Стили для информации о пользователе */
+
+.user-info {
+    padding: 20px;
+    color: #ffffff;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
-/* Стили для кнопок */
-button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: #ffffff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.status-container {
+    flex: 1;
+}
+
+.status-label {
+    color: #888888;
+    margin-bottom: 5px;
+}
+
+.status {
+    font-weight: bold;
     margin-bottom: 10px;
 }
+.days-label {
+    color: #888888;
+    margin-bottom: 5px;
+}
 
-/* Эффект при наведении на кнопку */
-button:hover {
+.days-count {
+    color: #ffffff;
+    text-align: right;
+    padding-right: 1600px;
+}
+.dialogia {
+    color: #888888; /* Зеленый цвет */
+  }
+
+  .status-label, .days-label {
+    color: #888888;
+    margin-bottom: 5px;
+    font-size: 25px; /* Увеличенный размер шрифта */
+}
+
+/* Основной контейнер для настроек пользователя */
+.user-settings {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column; /* вертикальное расположение */
+    align-items: flex-start; /* Выравнивание по левому краю */
+}
+
+.user-settings h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+/* Стили для блока изменения аватара */
+.avatar-change {
+    margin-bottom: 20px; /* Отступ снизу для разделения от блока с email и паролем */
+}
+/* Контейнер для полей изменения email и пароля */
+.user-info-change {
+    width: 100%; /* Занимает всю ширину */
+    max-width: 400px; /* Ограничивает максимальную ширину */
+}
+
+.current-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 4px solid #4CAF50; /* Зеленая граница */
+    box-shadow:  0 0 0 8px #4CAF50; /* Двойная граница */
+}
+
+.change-avatar-btn, .change-email-btn, .change-password-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Эффект при наведении на кнопки */
+.change-avatar-btn:hover, .change-email-btn:hover, .change-password-btn:hover {
     background-color: #45a049;
 }
 
-/* Класс для скрытия элементов */
-.hidden {
-    display: none;
+/* Стили для текстовых меток (labels) */
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #ffffff;
+    border-radius: 4px;
+}
+
+input[type="email"]:focus, input[type="password"]:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.email-change {
+    margin-bottom: 30px; /* Увеличиваем отступ снизу */
+}
+
+.avatar-change {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+/* Стили для контейнера аватара */
+.avatar-container {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background-color: #727272; /* Зеленый фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    overflow: hidden; /* Обрезает изображение по границам контейнера */
+}
+
+/* Стили для кнопки изменения аватара */
+
+.change-avatar-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s; /* Плавное изменение цвета при наведении */
+}
+
+.change-avatar-btn:hover {
+    background-color: #45a049;
 }
