@@ -6,12 +6,14 @@ from capcha import generate_captcha
 from config import *
 from db import create_db
 from ai_bot import generate_response
+import subprocess
 import datetime
 import pytz
 import sys
 import os
 import logging
 import asyncio
+import threading
 
 # Настройка политики событийного цикла для Windows
 if sys.platform == 'win32':
@@ -23,7 +25,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = 'static/images/'
 chat_history = {}
-
 
 # Создание базы данных при запуске приложения
 try:
@@ -317,7 +318,9 @@ def refresh_captcha():
 def page_not_found(e):
     return render_template('404.html'), 404
 
-
 # Запуск приложения
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     app.run(debug=True)
+
+
