@@ -308,6 +308,29 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg'}
 
+# Маршрут для изменения пароля
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    if 'username' not in session:
+        return 'Вы должны быть авторизованы для изменения пароля', 401
+
+    new_password = request.form['new-password']
+    confirm_password = request.form['confirm-password']
+
+    if new_password != confirm_password:
+        return 'Пароли не совпадают', 400
+
+    hashed_password = hashlib.sha256(new_password.encode()).hexdigest()
+
+    try:
+        conn = sqlite3.connect('db.db')
+        cursor = conn.cursor()
+        cursor.execute('UPDATE users SET password=? WHERE login=?', (hashed_password, session['username']))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('profile', username=session['username']))
+    except sqlite3.Error as e:
+        return 'Ошибка изменения пароля: ' + str(e)
 
 # Обработчик изменение аватара
 @app.route('/change_avatar', methods=['POST'])

@@ -59,17 +59,17 @@
                     </div>
                     <!-- Секция изменения пароля -->
                     <div class="password-change">
-                        <label for="new-password">Новый пароль:</label>
-                        <input type="password" id="new-password" name="new-password">
-                        <label for="confirm-password">Подтвердите пароль:</label>
-                        <input type="password" id="confirm-password" name="confirm-password">
-                        <button class="change-password-btn">Изменить пароль</button>
-                    </div>
+        <label for="new-password">Новый пароль:</label>
+        <input type="password" id="new-password" name="new-password">
+        <label for="confirm-password">Подтвердите пароль:</label>
+        <input type="password" id="confirm-password" name="confirm-password">
+        <button class="change-password-btn" onclick="changePassword()">Изменить пароль</button>
+    </div>
                 </div>
                 {% endif %}
             </div>
         </div>
     </div>
-
+<script src="../static/js/profile.js"></script>
 </body>
 </html>
