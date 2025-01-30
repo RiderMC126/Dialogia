@@ -213,7 +213,7 @@ def thread(thread_id):
     if avatar is not None and avatar[0] is not None:
         avatar = avatar[0]
     else:
-        avatar = 'avatar_none.png'
+        avatar = 'none_avatar.png'
     conn.close()
 
     if thread_data is None:
@@ -221,6 +221,7 @@ def thread(thread_id):
     else:
         return render_template('thread.html', thread=thread_data, posts=posts, avatar=avatar,
                                username=session['username'])
+
 
 # Маршрут для отправки поста
 @app.route('/send_post', methods=['POST'])

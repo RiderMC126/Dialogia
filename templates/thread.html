@@ -17,7 +17,11 @@
     <h1 style="border-bottom: black solid 3px">{{ thread[2] }}</h1>
     {% for post in posts %}
     <div class="post_box">
-        <img class="post_avatar" src="{{ url_for('static', filename='images/' + post[1]) }}" alt="Аватарка">
+        {% if avatar %}
+        <img class="input_src" src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка" style="width: 150px; height: 150px; border-radius: 50%; margin-right: 10px;">
+        {% else %}
+        <img class="input_src" src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка" style="width: 150px; height: 150px; border-radius: 50%; margin-right: 10px;">
+        {% endif %}
         <p class="post-nickname">{{ post[1] }}</p>
         <p class="post-text">{{ post[0] }}</p>
         <p class="post-time">{{ post[2] }}</p>
