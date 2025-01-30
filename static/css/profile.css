@@ -8,6 +8,18 @@
     box-sizing: border-box;
 }
 
+header {
+    height: 85px;
+    box-sizing: border-box; /* Это уже установлено для всех элементов, но можно явно указать */
+    background-color: #1a1a1a;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 /* Основные стили для body */
 body {
     font-family: 'Roboto', sans-serif;
@@ -219,3 +231,4 @@ input[type="email"]:focus, input[type="password"]:focus {
 .change-avatar-btn:hover {
     background-color: #45a049;
 }
+
