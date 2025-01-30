@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, session, g
+from flask import Flask, render_template, request, redirect, url_for, session, g, jsonify
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import sqlite3
 import hashlib
 from capcha import generate_captcha
 from config import *
 from db import create_db
+from ai_bot import generate_response
 import datetime
 import pytz
 import os
@@ -260,12 +261,20 @@ def profile(username):
     conn.close()
     return render_template('profile.html', username=username, avatar=avatar, last_online=last_online)
 
-@app.route('/ai-chat')
+@app.route('/ai-chat', methods=['GET', 'POST'])
 def ai_chat():
     update_online()
     title = "AI Chat"
-    answer = "ИДИ нахуй"
-    return render_template('ai-chat.html', title=title, answer=answer)
+    if request.method == 'POST':
+        # Получаем текст запроса от пользователя
+        prompt = request.form.get('prompt')
+        # Генерируем ответ с помощью ИИ
+        answer = generate_response(prompt)
+        # Возвращаем ответ в формате JSON
+        return jsonify({'answer': answer})
+    else:
+        # Если это GET-запрос, просто отображаем страницу
+        return render_template('ai-chat.html', title=title, answer="")
 
 # Обработка выхода из аккаунта
 @app.route('/logout')
