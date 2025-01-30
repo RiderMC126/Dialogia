@@ -194,50 +194,68 @@ def thread(thread_id):
     update_online()
     conn = sqlite3.connect("db.db")
     cursor = conn.cursor()
+
+    # Получаем данные темы
     cursor.execute('SELECT * FROM threads WHERE id=?', (thread_id,))
     thread_data = cursor.fetchone()
 
+    # Получаем посты для темы
     cursor.execute('''
         SELECT p.content, p.name, p.created_at, u.avatar
         FROM posts p
-        LEFT JOIN users u ON p.user_id = u.login
+        LEFT JOIN users u ON p.user_id = u.id  
         WHERE p.thread_id = ?
     ''', (thread_id,))
     posts = cursor.fetchall()
 
-    print("Посты:", posts)  # Отладка
-
-    hashed_login = hashlib.sha256(session['username'].encode()).hexdigest()
-    cursor.execute('SELECT avatar FROM users WHERE login=?', (hashed_login,))
-    avatar = cursor.fetchone()
-    if avatar is not None and avatar[0] is not None:
-        avatar = avatar[0]
+    # Получаем аватарку текущего пользователя
+    if 'username' in session:
+        username = session['username']
+        cursor.execute('SELECT avatar FROM users WHERE login=?', (username,))
+        avatar_result = cursor.fetchone()
+        if avatar_result and avatar_result[0]:
+            avatar = avatar_result[0]
+        else:
+            avatar = 'avatar_none.png'
     else:
         avatar = 'avatar_none.png'
+
     conn.close()
 
     if thread_data is None:
         return 'Тема не найдена'
     else:
         return render_template('thread.html', thread=thread_data, posts=posts, avatar=avatar,
-                               username=session['username'])
+                               username=session.get('username', 'Гость'))
 
 
 # Маршрут для отправки поста
 @app.route('/send_post', methods=['POST'])
 def send_post():
     update_online()
-    post = request.form['post']
+    post_content = request.form['post']
     thread_id = request.args.get('thread_id')
+    if 'username' not in session:
+        return 'Вы должны быть авторизованы для отправки поста', 401
+
     try:
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
-        hashed_login = hashlib.sha256(session['username'].encode()).hexdigest()
+
+        # Получаем user_id на основе имени пользователя
+        username = session['username']
+        cursor.execute('SELECT id FROM users WHERE login=?', (username,))
+        user_result = cursor.fetchone()
+        if user_result is None:
+            return 'Пользователь не найден', 404
+        user_id = user_result[0]
+
         utc_time = datetime.datetime.utcnow()
-        local_time = utc_time.astimezone(pytz.timezone('Europe/Moscow'))  # Московское время с DST
-        local_time = local_time + datetime.timedelta(hours=3)  # Добавить 3 часа
+        local_time = pytz.utc.localize(utc_time).astimezone(pytz.timezone('Europe/Moscow'))
         local_time = local_time.strftime('%Y-%m-%d %H:%M:%S')
-        cursor.execute('INSERT INTO posts (thread_id, user_id, content, name, created_at) VALUES (?, ?, ?, ?, ?)', (thread_id, hashed_login, post, session['username'], local_time))
+
+        cursor.execute('INSERT INTO posts (thread_id, user_id, content, name, created_at) VALUES (?, ?, ?, ?, ?)',
+                       (thread_id, user_id, post_content, username, local_time))
         conn.commit()
         conn.close()
         return redirect(url_for('thread', thread_id=thread_id))

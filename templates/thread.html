@@ -29,7 +29,7 @@
     {% endfor %}
     <form action="{{ url_for('send_post', thread_id=thread[0]) }}" method="post">
     <div class="input_chat">
-        <img class="input_src" src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка" style="width: 150px; height: 150px; border-radius: 50%; margin-right: 10px;">
+        <img class="post_avatar" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
         <textarea class="post-textarea" name="post" placeholder="Введите свой пост"></textarea>
         <button class="input_btn">Отправить</button>
     </div>
