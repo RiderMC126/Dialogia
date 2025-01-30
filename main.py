@@ -260,6 +260,12 @@ def profile(username):
     conn.close()
     return render_template('profile.html', username=username, avatar=avatar, last_online=last_online)
 
+@app.route('/ai-chat')
+def ai_chat():
+    update_online()
+    title = "AI Chat"
+    return render_template('ai-chat.html', title=title)
+
 # Обработка выхода из аккаунта
 @app.route('/logout')
 def logout():

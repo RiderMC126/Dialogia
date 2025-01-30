@@ -1,0 +1,63 @@
+.container {
+    position: absolute;
+    display: block;
+    background: #1a1a1a;
+    width: 80%;
+    min-height: 800px;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-bottom: 100px;
+    max-height: 2000px;
+    text-decoration: none;
+    border-radius: 12px;
+    overflow-x: hidden;
+    z-index: 0;
+}
+
+.footer {
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    background-color: #1a1a1a;
+    bottom: 0;
+    display: flex;
+    width: 100%;
+    height: 70px;
+    z-index: 1;
+}
+
+.input-text {
+    position: absolute;
+    width: 80%;
+    height: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px;
+    font-size: 20px;
+    border-radius: 15px;
+    padding: 10px 10px 5px;
+    resize: none;
+}
+
+.button-trash {
+    width: 40px;
+    height: 40px;
+    border: 1px white solid; /* Убрать границу */
+    background-color: white; /* Прозрачный фон */
+    cursor: pointer; /* Изменить курсор на указывающий */
+    padding: 0; /* Убрать отступы */
+    position: absolute;
+    left: 105px;
+    border-radius: 50%;
+}
+
+.trash {
+    position: relative;
+    top: 45%;
+    left: 43%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+}
+
