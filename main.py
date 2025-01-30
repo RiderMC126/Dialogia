@@ -27,7 +27,6 @@ SERVER_LOG_FOLDER = 'server_logs'
 NONE_AVATAR_FOLDER = 'static/images/none_avatar.png'
 
 
-
 # Настройка политики событийного цикла для Windows
 setup_event_loop_policy()
 # Создаем папку для логов, если она не существует
@@ -36,6 +35,7 @@ create_log_folder(LOG_FOLDER)
 create_serverlog_folder(SERVER_LOG_FOLDER)
 # Создание базы данных при запуске приложения
 create_database()
+
 
 # Обновляем время последнего онлайна пользователя
 def update_online():
@@ -258,6 +258,7 @@ def send_post():
                        (thread_id, user_id, post_content, username, local_time))
         conn.commit()
         conn.close()
+        write_to_log(message=f"Пользователь {username} написал пост", folder=LOG_FOLDER)
         return redirect(url_for('thread', thread_id=thread_id))
     except sqlite3.Error as e:
         return 'Ошибка отправки поста: ' + str(e)
@@ -328,9 +329,29 @@ def change_password():
         cursor.execute('UPDATE users SET password=? WHERE login=?', (hashed_password, session['username']))
         conn.commit()
         conn.close()
+        write_to_log(message=f"Пользователь {session['username']} сменил пароль", folder=LOG_FOLDER)
         return redirect(url_for('profile', username=session['username']))
     except sqlite3.Error as e:
         return 'Ошибка изменения пароля: ' + str(e)
+
+# Маршрут для изменения email
+@app.route('/change_email', methods=['POST'])
+def change_email():
+    if 'username' not in session:
+        return 'Вы должны быть авторизованы для изменения email', 401
+
+    new_email = request.form['email']
+
+    try:
+        conn = sqlite3.connect('db.db')
+        cursor = conn.cursor()
+        cursor.execute('UPDATE users SET email=? WHERE login=?', (new_email, session['username']))
+        conn.commit()
+        conn.close()
+        write_to_log(message=f"Пользователь {session['username']} сменил почту", folder=LOG_FOLDER)
+        return redirect(url_for('profile', username=session['username']))
+    except sqlite3.Error as e:
+        return 'Ошибка изменения email: ' + str(e)
 
 # Обработчик изменение аватара
 @app.route('/change_avatar', methods=['POST'])
@@ -360,6 +381,7 @@ def change_avatar():
                 cursor.execute('UPDATE users SET avatar=? WHERE login=?', (filename, username))
                 conn.commit()
                 conn.close()
+                write_to_log(message=f"Пользователь {session['username']} сменил аватарку", folder=LOG_FOLDER)
 
                 return redirect(url_for('profile', username=username))
             else:
