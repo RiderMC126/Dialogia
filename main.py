@@ -260,6 +260,7 @@ def profile(username):
     conn.close()
     return render_template('profile.html', username=username, avatar=avatar, last_online=last_online)
 
+# Обработка выхода из аккаунта
 @app.route('/logout')
 def logout():
     update_online()
@@ -273,12 +274,14 @@ def inject_user():
         user = session['username']
     return dict(user=user)
 
+# Обновляет капчу при регистрации
 @app.route('/refresh_captcha')
 def refresh_captcha():
     captcha_text, _ = generate_captcha()
     session['captcha'] = captcha_text
     return redirect(url_for('register'))
 
+# Обрабатываем ошибку 404
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
