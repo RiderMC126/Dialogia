@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const userInput = document.getElementById('user-input');
     const chatLog = document.getElementById('chat-log');
     const sendButton = document.getElementById('send-button');
+    const clearButton = document.querySelector('button[name="clear-text"]');
+
+    // Добавляем обработчик события для кнопки очистки
+    clearButton.addEventListener('click', function() {
+        chatLog.innerHTML = ''; // Очищаем лог чата
+    });
 
     sendButton.addEventListener('click', function() {
         const userMessage = userInput.value.trim();
