@@ -29,7 +29,7 @@
                     <div class="avatar-change">
                         <div class="avatar-container">
                             {% if avatar %}
-                                <img src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка">
+                                <img class="avatar-image" src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка">
                             {% else %}
                                 <img class="avatar-image" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
                             {% endif %}
