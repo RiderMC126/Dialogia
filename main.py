@@ -213,7 +213,7 @@ def thread(thread_id):
     if avatar is not None and avatar[0] is not None:
         avatar = avatar[0]
     else:
-        avatar = 'none_avatar.png'
+        avatar = 'avatar_none.png'
     conn.close()
 
     if thread_data is None:
@@ -382,7 +382,7 @@ if __name__ == '__main__':
     write_to_serverlog("Сервер запущен!", SERVER_LOG_FOLDER)
     try:
         # Код запуска вашего сервера
-        app.run(debug=False)
+        app.run(debug=True, host="0.0.0.0", port=5000)
     except Exception as e:
         write_to_serverlog(f'Ошибка при запуске сервера: {e}', SERVER_LOG_FOLDER)
     finally:
