@@ -4,40 +4,32 @@ import sqlite3
 import hashlib
 from capcha import generate_captcha
 from config import *
+from utils import *
 from db import create_db
 from ai_bot import generate_response
-import subprocess
 import datetime
 import pytz
 import sys
 import os
 import logging
+from logging.handlers import RotatingFileHandler
 import asyncio
 import threading
-
-# Настройка политики событийного цикла для Windows
-if sys.platform == 'win32':
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
 # Инициализация приложения Flask
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = 'static/images/'
-chat_history = {}
+LOG_FOLDER = 'logs'
+
+# Настройка политики событийного цикла для Windows
+setup_event_loop_policy()
+# Создаем папку для логов, если она не существует
+create_log_folder(LOG_FOLDER)
 
 # Создание базы данных при запуске приложения
-try:
-    conn = sqlite3.connect('db.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="users"')
-    if cursor.fetchone() is None:
-        create_db()
-        print("База данных создана")
-    else:
-        print("База данных уже существует")
-except sqlite3.Error as e:
-    print(f"Ошибка создания базы данных: {e}")
+create_database()
 
 # Обновляем время последнего онлайна пользователя
 def update_online():
@@ -51,6 +43,7 @@ def update_online():
 # Маршрут для главной страницы
 @app.route("/")
 def index():
+    write_to_log(message="Зашли на сайт", folder=LOG_FOLDER)
     update_online()
     title = "Dialogia"
     conn = sqlite3.connect('db.db')
@@ -85,6 +78,7 @@ def login():
             conn = sqlite3.connect('db.db')
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM users WHERE login=? AND password=?', (login, hashed_password))
+            write_to_log(message=f"Пользователь {login} вошёл в аккаунт", folder=LOG_FOLDER)
             user = cursor.fetchone()
             if user:
                 session['logged_in'] = True
@@ -128,6 +122,7 @@ def register():
                 conn = sqlite3.connect('db.db')
                 cursor = conn.cursor()
                 cursor.execute('SELECT * FROM users WHERE login=?', (login,))
+                write_to_log(message=f"Пользователь {login} зарегистрировался", folder=LOG_FOLDER)
                 user = cursor.fetchone()
                 if user:
                     error = 'Логин уже существует'
@@ -283,6 +278,7 @@ def ai_chat():
     if request.method == 'POST':
         # Получаем текст запроса от пользователя
         prompt = request.form.get('prompt')
+        write_to_log(message=f"Пользователь {session['username']} спросил у ИИ: {prompt}", folder=LOG_FOLDER)
         # Генерируем ответ с помощью ИИ
         answer = generate_response(f"Всегда отвечай на русском!\nЗапрос: {prompt}")
         # Возвращаем ответ в формате JSON
@@ -294,6 +290,7 @@ def ai_chat():
 # Обработка выхода из аккаунта
 @app.route('/logout')
 def logout():
+    write_to_log(message=f"Пользователь {session['username']} вышел из аккаунта", folder=LOG_FOLDER)
     update_online()
     session['logged_in'] = False
     return redirect(url_for('index'))
