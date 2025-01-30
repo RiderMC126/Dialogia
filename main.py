@@ -8,14 +8,20 @@ from db import create_db
 from ai_bot import generate_response
 import datetime
 import pytz
+import sys
 import os
 import logging
+import asyncio
 
+
+if sys.platform == 'win32':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = 'static/images/'
+chat_history = {}
 
 
 # Создание базы данных при запуске приложения
@@ -269,7 +275,7 @@ def ai_chat():
         # Получаем текст запроса от пользователя
         prompt = request.form.get('prompt')
         # Генерируем ответ с помощью ИИ
-        answer = generate_response(prompt)
+        answer = generate_response(f"Всегда отвечай на русском!\nЗапрос: {prompt}")
         # Возвращаем ответ в формате JSON
         return jsonify({'answer': answer})
     else:
