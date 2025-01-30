@@ -22,6 +22,13 @@ def create_log_folder(folder):
     else:
         print(f'Папка "LOG_FOLDER" уже существует')
 
+def create_serverlog_folder(folder):
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+        print(f'Папка "SERVER_LOG_FOLDER" создана')
+    else:
+        print(f'Папка "SERVER_LOG_FOLDER" уже существует')
+
 
 def create_database():
     try:
@@ -38,6 +45,18 @@ def create_database():
 
 
 def write_to_log(message, folder):
+    # Генерируем имя файла с текущей датой
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    filename = f"log.{current_date}.txt"
+
+    # Путь к файлу
+    filepath = os.path.join(folder, filename)
+
+    # Записываем сообщение в файл
+    with open(filepath, 'a') as file:
+        file.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {message}\n")
+
+def write_to_serverlog(message, folder):
     # Генерируем имя файла с текущей датой
     current_date = datetime.now().strftime("%Y-%m-%d")
     filename = f"log.{current_date}.txt"

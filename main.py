@@ -23,13 +23,17 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = "static/images/"
 LOG_FOLDER = 'logs'
+SERVER_LOG_FOLDER = 'server_logs'
 NONE_AVATAR_FOLDER = 'static/images/none_avatar.png'
+
+
 
 # Настройка политики событийного цикла для Windows
 setup_event_loop_policy()
 # Создаем папку для логов, если она не существует
 create_log_folder(LOG_FOLDER)
-
+# Создаем папку для сервервых логов, если она не существует
+create_serverlog_folder(SERVER_LOG_FOLDER)
 # Создание базы данных при запуске приложения
 create_database()
 
@@ -374,6 +378,13 @@ def page_not_found(e):
 # Запуск приложения
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    app.run(debug=True)
+    write_to_serverlog("Сервер запущен!", SERVER_LOG_FOLDER)
+    try:
+        # Код запуска вашего сервера
+        app.run(debug=False)
+    except Exception as e:
+        write_to_serverlog(f'Ошибка при запуске сервера: {e}', SERVER_LOG_FOLDER)
+    finally:
+        write_to_serverlog('Сервер остановлен', SERVER_LOG_FOLDER)
 
 
