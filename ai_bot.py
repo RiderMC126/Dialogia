@@ -12,6 +12,7 @@ logger.setLevel(logging.DEBUG)
 class G4FModels(Enum):
     GPT4_MINI = "gpt-4"
     LLAMA3_1 = "llama-3.1-70b"
+    SONNET = "claude-3.5-sonnet"
 
 
 # Клиент для работы с ИИ

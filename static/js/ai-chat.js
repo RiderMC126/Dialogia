@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Добавляем сообщение пользователя в чат
             const userMessageHTML = `<div class="message user-message">${userMessage}</div>`;
             chatLog.innerHTML += userMessageHTML;
+            // Прокручиваем чат в самый низ плавно
+            chatLog.scrollTo({ top: chatLog.scrollHeight, behavior: 'smooth' });
 
             // Отправляем запрос на сервер
             fetch('/ai-chat', {
@@ -30,8 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const responseMessageHTML = `<div class="message response-message">${data.answer}</div>`;
                 chatLog.innerHTML += responseMessageHTML;
 
-                // Прокручиваем чат в самый низ
-                chatLog.scrollTop = chatLog.scrollHeight;
+                // Прокручиваем чат в самый низ плавно
+                chatLog.scrollTo({ top: chatLog.scrollHeight, behavior: 'smooth' });
             })
             .catch(error => {
                 console.error('Ошибка:', error);

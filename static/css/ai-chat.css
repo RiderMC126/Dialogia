@@ -3,15 +3,13 @@
     display: block;
     background: #1a1a1a;
     width: 80%;
-    min-height: 800px;
-    top: 55%;
+    height: 800px; /* Высота экрана минус высота хедера и футера */
+    top: 15%; /* Высота хедера */
     left: 50%;
-    transform: translate(-50%, -50%);
-    margin-bottom: 100px;
-    max-height: 2000px;
-    text-decoration: none;
+    transform: translateX(-50%);
+    margin-bottom: 0; /* Убрать нижний отступ */
     border-radius: 12px;
-    overflow-x: hidden;
+    overflow: hidden; /* Скрываем лишнюю часть */
     z-index: 0;
 }
 
@@ -22,9 +20,19 @@
     background-color: #1a1a1a;
     bottom: 0;
     display: flex;
-    width: 100%;
+    width: 100%; /* Ширина футера должна соответствовать ширине контейнера */
     height: 70px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1;
+}
+
+.chat-log {
+    padding: 20px;
+    overflow-y: auto;
+    height: 85%; /* Оставить место для футера */
+    display: flex;
+    flex-direction: column;
 }
 
 .input-text {
@@ -59,14 +67,6 @@
     transform: translate(-50%, -50%);
     width: 32px;
     height: 32px;
-}
-
-.chat-log {
-    padding: 20px;
-    overflow-y: auto;
-    max-height: 90%; /* Оставить место для футера */
-    display: flex;
-    flex-direction: column;
 }
 
 .message {
