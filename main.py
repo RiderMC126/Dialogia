@@ -264,7 +264,8 @@ def profile(username):
 def ai_chat():
     update_online()
     title = "AI Chat"
-    return render_template('ai-chat.html', title=title)
+    answer = "ИДИ нахуй"
+    return render_template('ai-chat.html', title=title, answer=answer)
 
 # Обработка выхода из аккаунта
 @app.route('/logout')

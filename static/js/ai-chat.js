@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const userMessageHTML = `<div class="message user-message">${userMessage}</div>`;
             chatLog.innerHTML += userMessageHTML;
 
-            // Отправляем ответ "Привет"
-            const responseMessage = 'Привет';
+            // Используем переменную answer, переданную из Jinja2
+            const responseMessage = answer;  // Используем значение переменной answer
             const responseMessageHTML = `<div class="message response-message">${responseMessage}</div>`;
             chatLog.innerHTML += responseMessageHTML;
 
