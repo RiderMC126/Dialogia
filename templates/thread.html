@@ -25,13 +25,20 @@
         <p class="post-nickname">{{ post[1] }}</p>
         <p class="post-text">{{ post[0] }}</p>
         <p class="post-time">{{ post[2] }}</p>
+        <p>{{ post[4] }}</p>
     </div>
     {% endfor %}
     <form action="{{ url_for('send_post', thread_id=thread[0]) }}" method="post">
     <div class="input_chat">
-        <img class="post_avatar" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
+        {% for post in posts %}
+        {% if post[3] %}
+            <img class="post_avatar" src="{{ url_for('static', filename='images/' + post[3]) }}" alt="Аватарка">
+        {% else %}
+            <img class="post_avatar" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
+        {% endif %}
         <textarea class="post-textarea" name="post" placeholder="Введите свой пост"></textarea>
         <button class="input_btn">Отправить</button>
+        {% endfor %}
     </div>
     </form>
 </div>

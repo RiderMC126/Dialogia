@@ -99,7 +99,8 @@
 
 /* Поле ввода текста */
 .post-textarea {
-    left: 10%;
+    left: 4%;
+    bottom: 30px;
     transform: translate(5%);
     position: relative;
     width: 100%;
@@ -113,6 +114,7 @@
 .input_btn {
     position: relative;
     left: 50%;
+    bottom: 90px;
     transform: translate(-50%);
     background-color: var(--main-color);
     color: var(--text-color);
