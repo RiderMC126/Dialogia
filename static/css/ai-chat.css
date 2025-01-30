@@ -61,3 +61,45 @@
     height: 32px;
 }
 
+.chat-log {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 90%; /* Оставить место для футера */
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.user-message {
+    background-color: #333;
+    color: white;
+    align-self: flex-end;
+}
+
+.response-message {
+    background-color: #555;
+    color: white;
+    align-self: flex-start;
+}
+
+.send-button {
+    position: absolute;
+    width: 100px; /* Добавлена кнопка */
+    height: 40px;
+    border: none;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+    right: 30px;
+    border-radius: 15px;
+}
+
+.send-button:hover {
+    background-color: #444;
+}
+
