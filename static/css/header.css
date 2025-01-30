@@ -45,6 +45,38 @@ a {
     text-decoration: none; color: white
 }
 
+.nav-buttons {
+    position: absolute;
+    top: 83px;
+    left: 0;
+    width: auto;
+    height: 50px;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background: #1a1a1a;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 0 10px 0 10px;
+
+
+
+}
+
+.nav-button {
+    display: inline-block;
+    border-radius: 10px;
+    background-color: #333333;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.nav-button:hover {
+    background-color: #444444;
+}
 
 
 
