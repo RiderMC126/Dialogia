@@ -411,6 +411,24 @@ def ai_chat():
         # Если это GET-запрос, просто отображаем страницу
         return render_template('ai-chat.html', title=title, answer="")
 
+# Обработка списка админов
+@app.route('/admin_list')
+def admin_list():
+    conn = sqlite3.connect('db.db')
+    cursor = conn.cursor()
+    # Получаем логин администраторов
+    cursor.execute('SELECT login FROM users WHERE role = ?', ('Администрация',))
+    admins = cursor.fetchall()
+    # Получаем логин модераторов
+    cursor.execute('SELECT login FROM users WHERE role = ?', ('Модератор',))
+    moderators = cursor.fetchall()
+    # Получаем логин программистов
+    cursor.execute('SELECT login FROM users WHERE role = ?', ('Программист',))
+    programmers = cursor.fetchall()
+    conn.close()
+    title = "Admin List"
+    return render_template("admin_list.html", title=title, admins=admins, moderators=moderators, programmers=programmers)
+
 # Обработка выхода из аккаунта
 @app.route('/logout')
 def logout():

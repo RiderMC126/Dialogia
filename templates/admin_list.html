@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="forums_box">
+        <div class="forum-header">
+            <div class="forum-text">Список администрации</div>
+        </div>
+        <hr>
+        <ol class="custom-list">
+            <li style="color: #FF3737;"><strong>Администрация</strong></li>
+            <ol style="list-style-type: none;">
+                {% if admins %}
+                    {% for admin in admins %}
+                        <li><a href="/members/{{ admin[0] }}">{{ admin[0] }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    <li>Нет администраторов</li>
+                {% endif %}
+            </ol>
+
+            <li style="color: #34C759"><strong>Модераторы</strong></li>
+            <ol style="list-style-type: none;">
+                {% if moderators %}
+                    {% for moderator in moderators %}
+                        <li><a>{{ moderator[0] }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    <li>Модераторов нет</li>
+                {% endif %}
+            </ol>
+
+            <li style="color: #2196F3"><strong>Программисты</strong></li>
+            <ol style="list-style-type: none;">
+                <li><a href="/members/RiderMC">RiderMC</a></li>
+                <li><a href="/members/TheLast">TheLast</a></li>
+            </ol>
+
+
+        </ol>
+
+    </div>
+</body>
+</html>
