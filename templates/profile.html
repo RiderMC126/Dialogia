@@ -9,38 +9,45 @@
 </head>
 <body>
 {% include 'header.html' %}
-
     <div class="container">
         <div class="content">
             <div class="user-info">
                 <div class="status-container">
                     <p class="status-label">Статус</p>
-                    <p class="status">{{ status }}</p>
+                    <p class="status" style="{% if role == 'Администрация' %}color: red{% endif %}">{{ role }}</p>
                 </div>
+
                 <div class="days-container">
                     <p class="days-label">В Dialogia</p>
-                    <p class="days-count">30 дней</p>
+                    <p class="days-count">{{ days_registered }} дней</p>
                 </div>
             </div>
-            
+
             <div class="user-settings">
                 <!-- Блок для изменения аватара -->
-                <div class="avatar-change">
-                    <div class="avatar-container">
-                        {% if avatar %}
-                            <img src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка">
+                <form id="avatar-upload-form" action="{{ url_for('change_avatar') }}" method="post" enctype="multipart/form-data">
+                    <div class="avatar-change">
+                        <div class="avatar-container">
+                            {% if avatar %}
+                                <img src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка">
                             {% else %}
-                            <img class="avatar-image" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
+                                <img class="avatar-image" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
+                            {% endif %}
+                        </div>
+                        {% if session['username'] == username %}
+                        <!-- Скрытое поле для загрузки файла -->
+                        <input type="file" id="avatar-input" name="avatar" accept="image/*" style="display: none;">
+                        <!-- Кнопка для отправки формы -->
+                        <button class="change-avatar-btn" id="upload-avatar-btn" type="submit">Изменить аватар</button>
+                        <!-- Кнопка для выбора файла -->
+                        <button style="margin-top: 10px" class="change-avatar-btn" id="select-avatar-btn">Выбрать аватар</button>
+
                         {% endif %}
                     </div>
-                    {% if session['username'] == username %}
-                    <!-- Скрытое поле для загрузки файла -->
-                    <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
-                    <!-- Кнопка, активирующая выбор файла -->
-                    <button class="change-avatar-btn" onclick="document.getElementById('avatar-upload').click()">Изменить аватар</button>
-                    {% endif %}
-                </div>
-                
+                    <script src="../static/js/avatar.js"></script>
+                </form>
+
+
                 <!-- Блок для изменения email и пароля -->
                 {% if session['username'] == username %}
                 <div class="user-info-change">
@@ -59,10 +66,10 @@
                         <button class="change-password-btn">Изменить пароль</button>
                     </div>
                 </div>
+                {% endif %}
             </div>
-            {% endif %}
+        </div>
     </div>
-    <script src="../static/js/avatar.js"></script>
 
 </body>
 </html>
