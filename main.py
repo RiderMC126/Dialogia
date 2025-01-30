@@ -8,6 +8,7 @@ from utils import *
 from db import create_db
 from ai_bot import generate_response
 import datetime
+
 import pytz
 import sys
 import os
@@ -22,6 +23,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = 'static/images/'
 LOG_FOLDER = 'logs'
+NONE_AVATAR_FOLDER = 'static/images/none_avatar.png'
 
 # Настройка политики событийного цикла для Windows
 setup_event_loop_policy()
@@ -243,9 +245,10 @@ def profile(username):
     update_online()
     conn = sqlite3.connect('db.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT avatar, last_online FROM users WHERE login=?', (username,))
+    cursor.execute('SELECT avatar, last_online, role FROM users WHERE login=?', (username,))
     user_data = cursor.fetchone()
     if user_data is not None:
+        status = user_data[2]
         avatar = user_data[0]
         last_online_time = user_data[1]
         if username == session['username']:
@@ -265,10 +268,10 @@ def profile(username):
         else:
             last_online = f"Был в сети {time_diff.days} дней назад"
     else:
-        avatar = 'avatar_none.png'
+        avatar = NONE_AVATAR_FOLDER  # Если пользователя нет, используем none.png
         last_online = None
     conn.close()
-    return render_template('profile.html', username=username, avatar=avatar, last_online=last_online)
+    return render_template('profile.html', username=username, avatar=avatar, last_online=last_online, status=status)
 
 # Маршрут для чата с ИИ
 @app.route('/ai-chat', methods=['GET', 'POST'])
