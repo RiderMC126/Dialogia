@@ -13,11 +13,12 @@ import os
 import logging
 import asyncio
 
-
+# Настройка политики событийного цикла для Windows
 if sys.platform == 'win32':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
+# Инициализация приложения Flask
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = 'static/images/'
@@ -37,7 +38,7 @@ try:
 except sqlite3.Error as e:
     print(f"Ошибка создания базы данных: {e}")
 
-# Обновляем онлайн пользователей
+# Обновляем время последнего онлайна пользователя
 def update_online():
     if 'username' in session:
         conn = sqlite3.connect('db.db')
@@ -46,6 +47,7 @@ def update_online():
         conn.commit()
         conn.close()
 
+# Маршрут для главной страницы
 @app.route("/")
 def index():
     update_online()
@@ -68,8 +70,7 @@ def index():
     conn.close()
     return render_template("index.html", title=title, categories=categories)
 
-
-
+# Маршрут для входа в систему
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     update_online()
@@ -94,6 +95,7 @@ def login():
             error = 'Ошибка авторизации: ' + str(e)
     return render_template('login.html', title=title, error=error)
 
+# Маршрут для регистрации
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     update_online()
@@ -152,6 +154,7 @@ def register():
                 session['captcha_text'] = captcha_text
     return render_template('register.html', title=title, error=error)
 
+# Маршрут для отображения категории
 @app.route('/category/<int:category_id>')
 def category(category_id):
     update_online()
@@ -166,6 +169,7 @@ def category(category_id):
     conn.close()
     return render_template('category.html', category=category, forums=forums, threads=threads)
 
+# Маршрут для отображения форума
 @app.route('/forum/<int:forum_id>')
 def forum(forum_id):
     update_online()
@@ -182,6 +186,7 @@ def forum(forum_id):
     else:
         return render_template('forum.html', forum=forum_data, threads=threads)
 
+# Маршрут для отображения тем
 @app.route('/thread/<int:thread_id>')
 def thread(thread_id):
     update_online()
@@ -215,6 +220,7 @@ def thread(thread_id):
         return render_template('thread.html', thread=thread_data, posts=posts, avatar=avatar,
                                username=session['username'])
 
+# Маршрут для отправки поста
 @app.route('/send_post', methods=['POST'])
 def send_post():
     update_online()
@@ -235,6 +241,7 @@ def send_post():
     except sqlite3.Error as e:
         return 'Ошибка отправки поста: ' + str(e)
 
+# Маршрут для отображения профиля пользователя
 @app.route('/members/<username>')
 def profile(username):
     update_online()
@@ -267,6 +274,7 @@ def profile(username):
     conn.close()
     return render_template('profile.html', username=username, avatar=avatar, last_online=last_online)
 
+# Маршрут для чата с ИИ
 @app.route('/ai-chat', methods=['GET', 'POST'])
 def ai_chat():
     update_online()
@@ -289,6 +297,7 @@ def logout():
     session['logged_in'] = False
     return redirect(url_for('index'))
 
+# Добавление пользователя в контекст шаблона
 @app.context_processor
 def inject_user():
     user = None
@@ -309,6 +318,6 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
-
+# Запуск приложения
 if __name__ == '__main__':
     app.run(debug=True)
