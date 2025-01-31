@@ -11,7 +11,7 @@
 {% include 'header.html' %}
     <div class="container">
         <form class="login-form" method="POST" action="{{ url_for('login') }}">
-            <h2 style="color: #691169;">Dialogia</h2>
+            <h2 style="color: #691169; font-family: sans-serif; font-weight: 300">Dialogia</h2>
             <h2>Вход</h2>
             {% if error %}
             <div class="error-message">{{ error }}</div>
