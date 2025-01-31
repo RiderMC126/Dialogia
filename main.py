@@ -84,17 +84,29 @@ def login():
             conn = sqlite3.connect('db.db')
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM users WHERE login=? AND password=?', (login, hashed_password))
-            write_to_log(message=f"Пользователь {login} вошёл в аккаунт", folder=LOG_FOLDER)
             user = cursor.fetchone()
             if user:
+                # Проверяем статус блокировки
+                cursor.execute('SELECT blocked FROM users WHERE login=?', (login,))
+                blocked_status = cursor.fetchone()[0]
+                if blocked_status == "YES":
+                    conn.close()
+                    return render_template('blocked.html', title="Аккаунт заблокирован")
+
+                write_to_log(message=f"Пользователь {login} вошёл в аккаунт", folder=LOG_FOLDER)
                 session['logged_in'] = True
                 session['username'] = login
+                conn.close()
                 return redirect(url_for('index'))
             else:
                 error = 'Неправильный логин или пароль'
         except sqlite3.Error as e:
             error = 'Ошибка авторизации: ' + str(e)
+        finally:
+            if conn:
+                conn.close()
     return render_template('login.html', title=title, error=error)
+
 
 # Маршрут для регистрации
 @app.route('/register', methods=['GET', 'POST'])
