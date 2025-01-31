@@ -114,7 +114,7 @@
 .input_btn {
     position: relative;
     left: 50%;
-    bottom: 90px;
+    bottom: 10px;
     transform: translate(-50%);
     background-color: var(--main-color);
     color: var(--text-color);
