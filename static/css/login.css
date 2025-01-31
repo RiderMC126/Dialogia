@@ -73,7 +73,7 @@ input:focus {
 }
 
 /* Стили для кнопки */
-button {
+.button_login {
     width: 100%;
     padding: 12px;
     border: none;
@@ -86,7 +86,7 @@ button {
 }
 
 /* Стили для кнопки при наведении */
-button:hover {
+.button_login:hover {
     background-color: #45a049;
 }
 

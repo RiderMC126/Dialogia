@@ -65,7 +65,7 @@ input:focus {
     border-bottom: 1px solid #4CAF50;
 }
 
-button {
+.button_login {
     width: 100%;
     padding: 12px;
     border: none;
@@ -77,7 +77,7 @@ button {
     transition: background-color 0.3s;
 }
 
-button:hover {
+.button_login:hover {
     background-color: #45a049;
 }
 
