@@ -67,3 +67,12 @@ def write_to_serverlog(message, folder):
     # Записываем сообщение в файл
     with open(filepath, 'a') as file:
         file.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {message}\n")
+
+
+def pluralize_russian(number, one, few, many):
+    if number % 10 == 1 and number % 100 != 11:
+        return f"{number} {one}"
+    elif 2 <= number % 10 <= 4 and (number % 100 < 10 or number % 100 >= 20):
+        return f"{number} {few}"
+    else:
+        return f"{number} {many}"

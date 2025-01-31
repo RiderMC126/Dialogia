@@ -242,3 +242,9 @@ input[type="email"]:focus, input[type="password"]:focus {
     background-color: #45a049;
 }
 
+.last-online {
+    text-align: center;
+    font-size: 14px;
+    color: #888;  /* Или другой цвет по вашему выбору */
+}
+

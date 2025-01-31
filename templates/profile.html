@@ -34,6 +34,7 @@
                                 <img class="avatar-image" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
                             {% endif %}
                         </div>
+                        <div class="last_online">{{ last_online }}</div>
                         {% if session['username'] == username %}
                         <!-- Скрытое поле для загрузки файла -->
                         <input type="file" id="avatar-input" name="avatar" accept="image/*" style="display: none;">

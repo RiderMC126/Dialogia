@@ -303,11 +303,14 @@ def profile(username):
     if time_diff < datetime.timedelta(minutes=5):
         last_online = "в сети"
     elif time_diff < datetime.timedelta(hours=1):
-        last_online = f"Был в сети {time_diff.seconds // 60} минут назад"
+        minutes = time_diff.seconds // 60
+        last_online = f"Был в сети {pluralize_russian(minutes, 'минуту', 'минуты', 'минут')} назад"
     elif time_diff < datetime.timedelta(days=1):
-        last_online = f"Был в сети {time_diff.seconds // 3600} часов назад"
+        hours = time_diff.seconds // 3600
+        last_online = f"Был в сети {pluralize_russian(hours, 'час', 'часа', 'часов')} назад"
     else:
-        last_online = f"Был в сети {time_diff.days} дней назад"
+        days = time_diff.days
+        last_online = f"Был в сети {pluralize_russian(days, 'день', 'дня', 'дней')} назад"
 
     registered_datetime = datetime.datetime.strptime(registration_date, '%Y-%m-%d %H:%M:%S')
     days_registered = (datetime.datetime.now() - registered_datetime).days
