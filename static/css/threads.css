@@ -28,6 +28,7 @@
     color: var(--text-color);
     box-shadow: 0 0 10px var(--shadow-color);
     overflow: hidden;
+    position: relative;
 }
 
 /* Аватарка поста */
@@ -66,15 +67,17 @@
 
 /* Время поста */
 .post-time {
-    width: 10%;
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+    font-size: 0.9em;
+    color: #d0d0d0;  /* Светло-серый цвет для лучшей видимости на темном фоне */
     background: var(--main-color);
-    position: relative;
-    bottom: 10px;
-    left: 90%;
-    min-height: 100px;
-    word-wrap: break-word;
-    z-index: 0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1;  /* Чтобы время было поверх других элементов */
 }
+
 
 /* Форма ввода сообщения */
 .input_chat {
