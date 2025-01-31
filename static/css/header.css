@@ -57,9 +57,6 @@ a {
     background: #1a1a1a;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding: 0 10px 0 10px;
-
-
-
 }
 
 .nav-button {
@@ -79,5 +76,38 @@ a {
 }
 
 
+.search-container {
+    position: absolute;
+    top: 83px;
+    right: 0;
+    width: auto;
+    height: 50px;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background: #1a1a1a;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 0 10px 0 10px;
+}
+.search-results-container {
+    color: white;
+    position: absolute;
+    top: 132px;
+    width: 242px;
+    height: 100px;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.7); /* 70% непрозрачности */
+    overflow-y: auto;
+    max-height: 300px;
+    z-index: 1000;
+    display: none;
+}
 
-
+#search-results {
+    color: black;
+    position: absolute;
+    left: 15px;
+    top: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}

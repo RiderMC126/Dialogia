@@ -434,6 +434,23 @@ def services():
     title = "Сервисы"
     return render_template('services.html', title=title)
 
+
+@app.route('/search_threads')
+def search_threads():
+    query = request.args.get('query', '')
+    if len(query) < 3:
+        return jsonify([])
+
+    conn = sqlite3.connect('db.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, title FROM threads WHERE title LIKE ? LIMIT 5", ('%' + query + '%',))
+    results = cursor.fetchall()
+    conn.close()
+
+    threads = [{'id': row[0], 'title': row[1]} for row in results]
+    return jsonify(threads)
+
+
 # Обработка выхода из аккаунта
 @app.route('/logout')
 def logout():
