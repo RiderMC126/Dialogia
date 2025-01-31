@@ -6,7 +6,7 @@ from aiogram.filters import CommandStart, Command, StateFilter
 from aiogram.types import Message
 from aiogram import Bot, Dispatcher, types, F, Router
 from aiogram.fsm.state import State, StatesGroup
-from config import TELEGRAM_BOT_TOKEN, admin_id
+from config import TELEGRAM_BOT_TOKEN, admin_id, DATABASE_URL
 from keyboards.keyboards_admins import index_keyboard_admins, gohome_keyboard_admins
 import logging
 import asyncio
@@ -30,7 +30,7 @@ async def index(message: types.Message):
 
 @dp.callback_query(F.data == "count_users")
 async def price(callback: types.CallbackQuery):
-    conn = sqlite3.connect("../db.db")
+    conn = sqlite3.connect(DATABASE_URL)
     cursor = conn.cursor()
     cursor.execute('SELECT login FROM users')
     users = cursor.fetchall()
@@ -50,6 +50,7 @@ async def price(callback: types.CallbackQuery):
 @dp.callback_query(F.data == "gohome")
 async def price(call: types.CallbackQuery):
     await bot.send_message(call.message.chat.id, text="Привет, Админ! Что нужно?", reply_markup=index_keyboard_admins())
+    await callback.answer()
 
 
 
