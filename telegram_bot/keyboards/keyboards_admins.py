@@ -3,7 +3,8 @@ from aiogram.types import KeyboardButton, InlineKeyboardButton, InlineKeyboardMa
 def index_keyboard_admins():
     buttons = [
         [InlineKeyboardButton(text="Пользователи", callback_data="count_users")],
-        [InlineKeyboardButton(text="Заблокировать", callback_data="blocked_users"), InlineKeyboardButton(text="Разблокировать", callback_data="unblocked_users")]
+        [InlineKeyboardButton(text="Заблокировать", callback_data="blocked_users"), InlineKeyboardButton(text="Разблокировать", callback_data="unblocked_users")],
+        [InlineKeyboardButton(text="Создать", callback_data="create")],
     ]
     inline_kb = InlineKeyboardMarkup(inline_keyboard=buttons)
     return inline_kb
