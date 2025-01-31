@@ -438,7 +438,7 @@ def services():
 @app.route('/search_threads')
 def search_threads():
     query = request.args.get('query', '')
-    if len(query) < 3:
+    if len(query) < 1:
         return jsonify([])
 
     conn = sqlite3.connect('db.db')
