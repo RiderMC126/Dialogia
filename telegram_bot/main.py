@@ -8,6 +8,7 @@ from aiogram import Bot, Dispatcher, types, F, Router
 from aiogram.fsm.state import State, StatesGroup
 from config import TELEGRAM_BOT_TOKEN, admin_id, DATABASE_URL
 from keyboards.keyboards_admins import index_keyboard_admins, gohome_keyboard_admins
+from database import get_user_info
 import logging
 import asyncio
 import sys
@@ -30,17 +31,7 @@ async def index(message: types.Message):
 
 @dp.callback_query(F.data == "count_users")
 async def price(callback: types.CallbackQuery):
-    conn = sqlite3.connect(DATABASE_URL)
-    cursor = conn.cursor()
-    cursor.execute('SELECT login FROM users')
-    users = cursor.fetchall()
-    user_count = len(users)
-    user_list = "\n".join([user[0] for user in users])
-    cursor.execute('SELECT login FROM users WHERE role = ?', ('Администрация',))
-    admins = cursor.fetchall()
-    admin_count = len(admins)
-    admin_list = "\n".join([admin[0] for admin in admins])
-    conn.close()
+    user_list, user_count, admin_list, admin_count = get_user_info()
 
     await bot.send_message(callback.message.chat.id,
                            text=f"---------------------------\nСписок всех пользователей:\n{user_list}\n---------------------------\nОбщее количество пользователей - {user_count} человек\n---------------------------\nСписок Администрации:\n{admin_list}\n---------------------------\nОбщее количество администраторов - {admin_count} человек",
@@ -48,8 +39,8 @@ async def price(callback: types.CallbackQuery):
     await callback.answer()
 
 @dp.callback_query(F.data == "gohome")
-async def price(call: types.CallbackQuery):
-    await bot.send_message(call.message.chat.id, text="Привет, Админ! Что нужно?", reply_markup=index_keyboard_admins())
+async def price(callback: types.CallbackQuery):
+    await bot.send_message(callback.message.chat.id, text="Привет, Админ! Что нужно?", reply_markup=index_keyboard_admins())
     await callback.answer()
 
 
