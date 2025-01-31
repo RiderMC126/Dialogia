@@ -124,12 +124,14 @@ hr {
 .custom-list {
     list-style-type: none; /* Убираем стандартные маркеры */
     padding: 0; /* Убираем отступы */
+
 }
 
 .custom-list li {
     position: relative; /* Для абсолютного позиционирования маркера */
     padding-left: 20px; /* Увеличиваем отступ для маркера и текста */
     color: white;
+    margin-top: 5px;
 }
 
 .custom-list li::before {
