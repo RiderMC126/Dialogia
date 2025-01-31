@@ -8,7 +8,7 @@ from aiogram import Bot, Dispatcher, types, F, Router
 from aiogram.fsm.state import State, StatesGroup
 from config import TELEGRAM_BOT_TOKEN, admin_id, DATABASE_URL
 from keyboards.keyboards_admins import index_keyboard_admins, gohome_keyboard_admins, create_admins
-from database import get_user_info, create_categories, get_categories, create_forums
+from database import get_user_info, create_categories, get_categories, create_forums, get_forums, create_threads
 import logging
 import asyncio
 import sys
@@ -56,10 +56,9 @@ async def create(callback: types.CallbackQuery):
     await bot.send_message(callback.message.chat.id, text=f"Выбери то, что нужно создать: ", reply_markup=create_admins())
     await callback.answer()
 
-
 @dp.callback_query(F.data == "create_category")
 async def create(callback: types.CallbackQuery, state: FSMContext):
-    await bot.send_message(callback.message.chat.id, text=f"Введите название категории: ", reply_markup=gohome_keyboard_admins())
+    await bot.send_message(callback.message.chat.id, text="Введите название категории:", reply_markup=gohome_keyboard_admins())
     await callback.answer()
     await state.set_state(Create.categories)
 
@@ -67,10 +66,17 @@ async def create(callback: types.CallbackQuery, state: FSMContext):
 async def categories_name(message: types.Message, state: FSMContext):
     await state.update_data(categories_name=message.text)
     try:
-        create_categories(message.text)
-        await bot.send_message(message.chat.id, text=f"Успешно! Создана категория с названием: {message.text}")
+        new_category_id = create_categories(message.text)
+        if new_category_id:
+            await message.reply(f"Категория '{message.text}' успешно создана с ID: {new_category_id}")
+        else:
+            await message.reply("Произошла ошибка при создании категории.")
     except sqlite3.Error as error:
-        await bot.send_message(message.chat.id, text=f"Произошла ошибка: {error}")
+        await message.reply(f"Произошла ошибка: {error}")
+
+    await state.clear()
+    await message.answer("Что дальше?", reply_markup=index_keyboard_admins())
+
 
 @dp.callback_query(F.data == "create_forums")
 async def create(callback: types.CallbackQuery, state: FSMContext):
@@ -100,6 +106,38 @@ async def forums_name(message: types.Message, state: FSMContext):
     except ValueError:
         await message.reply(
             "Неправильный формат. Пожалуйста, введите ID категории и название форума, разделенные пробелом.")
+
+    await state.clear()
+    await message.answer("Что дальше?", reply_markup=index_keyboard_admins())
+
+@dp.callback_query(F.data == "create_threads")
+async def create(callback: types.CallbackQuery, state: FSMContext):
+    forums = get_forums()
+    if forums:
+        forum_list = "\n".join([f"{forum[0]} | {forum[2]}" for forum in forums])
+        await bot.send_message(callback.message.chat.id, text=f"Список форумов:\n{forum_list}")
+    else:
+        await bot.send_message(callback.message.chat.id, text="Не удалось получить список форумов")
+    await bot.send_message(callback.message.chat.id, text="Введите forum_id и название для threads:\nПример: 1 Название темы", reply_markup=gohome_keyboard_admins())
+    await callback.answer()
+    await state.set_state(Create.threads)
+
+@dp.message(StateFilter(Create.threads))
+async def threads_name(message: types.Message, state: FSMContext):
+    await state.update_data(threads_name=message.text)
+    try:
+        forum_id, thread_name = message.text.split(' ', 1)
+        forum_id = int(forum_id)
+
+        new_thread_id = create_threads(forum_id, thread_name)
+
+        if new_thread_id:
+            await message.reply(f"Тема '{thread_name}' успешно создана с ID: {new_thread_id}")
+        else:
+            await message.reply("Произошла ошибка при создании темы.")
+    except ValueError:
+        await message.reply(
+            "Неправильный формат. Пожалуйста, введите ID форума и название темы, разделенные пробелом.")
 
     await state.clear()
     await message.answer("Что дальше?", reply_markup=index_keyboard_admins())

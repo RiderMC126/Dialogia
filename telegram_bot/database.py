@@ -28,12 +28,26 @@ def get_categories():
     categories = cursor.fetchall()
     return categories
 
+def get_forums():
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, category_id , name FROM forums')
+    forums = cursor.fetchall()
+    return forums
+
 def create_categories(name):
     conn = sqlite3.connect(DATABASE_URL)
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO categories (name) VALUES (?)", (name,))
-    conn.commit()
-    conn.close()
+    try:
+        cursor.execute("INSERT INTO categories (name) VALUES (?)", (name,))
+        conn.commit()
+        new_id = cursor.lastrowid
+        return new_id
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return None
+    finally:
+        conn.close()
 
 
 def create_forums(category_id, name):
@@ -41,6 +55,20 @@ def create_forums(category_id, name):
     cursor = conn.cursor()
     try:
         cursor.execute('INSERT INTO forums (category_id, name) VALUES (?, ?)', (category_id, name))
+        conn.commit()
+        new_id = cursor.lastrowid
+        return new_id
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return None
+    finally:
+        conn.close()
+
+def create_threads(forums_id, name):
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+    try:
+        cursor.execute('INSERT INTO threads (forum_id, title) VALUES (?, ?)', (forums_id, name))
         conn.commit()
         new_id = cursor.lastrowid
         return new_id
