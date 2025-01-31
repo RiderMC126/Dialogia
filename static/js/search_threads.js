@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         debounceTimer = setTimeout(() => {
             const query = this.value;
 
-            if (query.length >= 3) {
+            if (query.length >= 2   ) {
                 fetch('/search_threads?query=' + encodeURIComponent(query))
                     .then(response => response.json())
                     .then(data => {
