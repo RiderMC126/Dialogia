@@ -429,6 +429,11 @@ def admin_list():
     title = "Admin List"
     return render_template("admin_list.html", title=title, admins=admins, moderators=moderators, programmers=programmers)
 
+@app.route('/services')
+def services():
+    title = "Сервисы"
+    return render_template('services.html', title=title)
+
 # Обработка выхода из аккаунта
 @app.route('/logout')
 def logout():
