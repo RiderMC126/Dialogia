@@ -12,12 +12,10 @@
     background: var(--main-color);
     width: 80%;
     min-height: 500px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 15%);
-    margin-bottom: 100px;
-    max-height: 5000px;
+    margin: 120px auto; /* Используем margin вместо top и transform */
+    padding-bottom: 20px; /* Добавляем отступ снизу */
 }
+
 
 /* Блок поста */
 .post_box {
