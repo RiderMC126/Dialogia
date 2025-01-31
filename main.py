@@ -451,7 +451,7 @@ def admin_list():
     conn = sqlite3.connect('db.db')
     cursor = conn.cursor()
     # Получаем логин администраторов
-    cursor.execute('SELECT login FROM users WHERE role = ?', ('Администрация',))
+    cursor.execute('SELECT login FROM users WHERE role = ?', ('Администратор',))
     admins = cursor.fetchall()
     # Получаем логин модераторов
     cursor.execute('SELECT login FROM users WHERE role = ?', ('Модератор',))
