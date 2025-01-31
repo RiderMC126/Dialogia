@@ -19,3 +19,12 @@ def get_user_info():
     conn.close()
 
     return user_list, user_count, admin_list, admin_count
+
+
+def create_categories(name):
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO categories (name) VALUES (?)", (name,))
+    conn.commit()
+    conn.close()

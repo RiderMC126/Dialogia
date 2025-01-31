@@ -15,3 +15,11 @@ def gohome_keyboard_admins():
     ]
     inline_kb = InlineKeyboardMarkup(inline_keyboard=buttons)
     return inline_kb
+
+def create_admins():
+    buttons = [
+        [InlineKeyboardButton(text="Категорию", callback_data="create_category"), InlineKeyboardButton(text="Forum", callback_data="create_forums")],
+        [InlineKeyboardButton(text="Thread", callback_data="create_threads")]
+    ]
+    inline_kb = InlineKeyboardMarkup(inline_keyboard=buttons)
+    return inline_kb
