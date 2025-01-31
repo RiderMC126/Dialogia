@@ -16,4 +16,5 @@
   <li>Запускаете ngrok</li>
   <li>Вводите свой токен: <blockquote>ngrok config add-authtoken TOKEN</blockquote></li>
   <li>Запускаете сервер: <blockquote>ngrok http 5000</blockquote></li>
+  <li>Запускаете телеграмм бота: <blockquote>/telegram_bot/main.py</blockquote></li>
 </ol>
