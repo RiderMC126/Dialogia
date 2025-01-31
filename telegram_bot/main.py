@@ -8,7 +8,7 @@ from aiogram import Bot, Dispatcher, types, F, Router
 from aiogram.fsm.state import State, StatesGroup
 from config import TELEGRAM_BOT_TOKEN, admin_id, DATABASE_URL
 from keyboards.keyboards_admins import index_keyboard_admins, gohome_keyboard_admins, create_admins
-from database import get_user_info, create_categories
+from database import get_user_info, create_categories, get_categories, create_forums
 import logging
 import asyncio
 import sys
@@ -71,6 +71,40 @@ async def categories_name(message: types.Message, state: FSMContext):
         await bot.send_message(message.chat.id, text=f"Успешно! Создана категория с названием: {message.text}")
     except sqlite3.Error as error:
         await bot.send_message(message.chat.id, text=f"Произошла ошибка: {error}")
+
+@dp.callback_query(F.data == "create_forums")
+async def create(callback: types.CallbackQuery, state: FSMContext):
+    categories = get_categories()
+    if categories:
+        category_list = "\n".join([f"{cat[0]} | {cat[1]}\n----------------------" for cat in categories])
+        await bot.send_message(callback.message.chat.id, text=f"Список категорий:\n{category_list}")
+    else:
+        await bot.send_message(callback.message.chat.id, text=f"Не удалось получить список категорий")
+    await bot.send_message(callback.message.chat.id, text=f"Введите category_id и название для forum:\nПример: 1 Название", reply_markup=gohome_keyboard_admins())
+    await callback.answer()
+    await state.set_state(Create.forums)
+
+@dp.message(StateFilter(Create.forums))
+async def forums_name(message: types.Message, state: FSMContext):
+    await state.update_data(forums_name=message.text)
+    try:
+        category_id, forum_name = message.text.split(' ', 1)
+        category_id = int(category_id)
+
+        new_forum_id = create_forums(category_id, forum_name)
+
+        if new_forum_id:
+            await message.reply(f"Форум '{forum_name}' успешно создан с ID: {new_forum_id}")
+        else:
+            await message.reply("Произошла ошибка при создании форума.")
+    except ValueError:
+        await message.reply(
+            "Неправильный формат. Пожалуйста, введите ID категории и название форума, разделенные пробелом.")
+
+    await state.clear()
+    await message.answer("Что дальше?", reply_markup=index_keyboard_admins())
+
+
 
 
 

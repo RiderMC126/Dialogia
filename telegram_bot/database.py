@@ -21,10 +21,31 @@ def get_user_info():
     return user_list, user_count, admin_list, admin_count
 
 
+def get_categories():
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, name FROM categories')
+    categories = cursor.fetchall()
+    return categories
+
 def create_categories(name):
     conn = sqlite3.connect(DATABASE_URL)
     cursor = conn.cursor()
-
     cursor.execute("INSERT INTO categories (name) VALUES (?)", (name,))
     conn.commit()
     conn.close()
+
+
+def create_forums(category_id, name):
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+    try:
+        cursor.execute('INSERT INTO forums (category_id, name) VALUES (?, ?)', (category_id, name))
+        conn.commit()
+        new_id = cursor.lastrowid
+        return new_id
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return None
+    finally:
+        conn.close()
