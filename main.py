@@ -42,7 +42,14 @@ def update_online():
     if 'username' in session:
         conn = sqlite3.connect('db.db')
         cursor = conn.cursor()
-        cursor.execute('UPDATE users SET last_online=CURRENT_TIMESTAMP WHERE login=?', (session['username'],))
+
+        # Получаем текущее время и добавляем 3 часа
+        current_time = datetime.datetime.now()# + datetime.timedelta(hours=3)
+
+        # Форматируем время в строку, совместимую с SQLite
+        time_string = current_time.strftime('%Y-%m-%d %H:%M:%S')
+
+        cursor.execute('UPDATE users SET last_online=? WHERE login=?', (time_string, session['username']))
         conn.commit()
         conn.close()
 
@@ -290,18 +297,11 @@ def profile(username):
 
     avatar, last_online_time, role, registration_date, email = user_data
 
-    if 'username' in session and username == session['username']:
-        utc_now = datetime.datetime.now(pytz.utc)
-        cursor.execute('UPDATE users SET last_online=? WHERE login=?',
-                       (utc_now.strftime('%Y-%m-%d %H:%M:%S'), username))
-        conn.commit()
-
-    # Предполагаем, что время в базе данных хранится в UTC
+    # Преобразуем строку времени в объект datetime
     last_online_time = datetime.datetime.strptime(last_online_time, '%Y-%m-%d %H:%M:%S')
-    last_online_time = pytz.utc.localize(last_online_time)
 
-    # Получаем текущее время в UTC
-    now = datetime.datetime.now(pytz.utc)
+    # Получаем текущее время
+    now = datetime.datetime.now()
     print(f"ВРЕМЯ СЕЙЧАС - {now}")
 
     # Вычисляем разницу
@@ -319,7 +319,7 @@ def profile(username):
         days = time_diff.days
         last_online = f"Был в сети {pluralize_russian(days, 'день', 'дня', 'дней')} назад"
     else:
-        last_online = last_online_time.astimezone(pytz.timezone('Europe/Moscow')).strftime('%d.%m.%Y %H:%M по Москве')
+        last_online = last_online_time.strftime('%d.%m.%Y %H:%M')
 
     registered_datetime = datetime.datetime.strptime(registration_date, '%Y-%m-%d %H:%M:%S')
     days_registered = (datetime.datetime.now() - registered_datetime).days
@@ -336,6 +336,7 @@ def profile(username):
                            days_registered=days_registered,
                            email=email,
                            is_own_profile=is_own_profile)
+
 
 
 def allowed_file(filename):
