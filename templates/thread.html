@@ -22,7 +22,7 @@
         {% else %}
             <img class="post_avatar" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
         {% endif %}
-        <p class="post-nickname">{{ post[1] }}</p>
+        <p class="post-nickname"><a href="/members/{{ post[1] }}">{{ post[1] }}</a></p>
         <p class="post-text">{{ post[0] }}</p>
         <p class="post-time">{{ post[2] }}</p>
         <p>{{ post[4] }}</p>
@@ -30,12 +30,8 @@
     {% endfor %}
     <form action="{{ url_for('send_post', thread_id=thread[0]) }}" method="post">
     <div class="input_chat">
-        {% if posts %}
-            {% if posts[-1][3] %}
-                <img class="post_avatar" src="{{ url_for('static', filename='images/' + posts[-1][3]) }}" alt="Аватарка">
-            {% else %}
-                <img class="post_avatar" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
-            {% endif %}
+        {% if 'username' in session %}
+            <img class="post_avatar" src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка">
         {% else %}
             <img class="post_avatar" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
         {% endif %}
@@ -43,6 +39,7 @@
         <button class="input_btn">Отправить</button>
     </div>
 </form>
+
 
 </div>
 
