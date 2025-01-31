@@ -291,13 +291,20 @@ def profile(username):
     avatar, last_online_time, role, registration_date, email = user_data
 
     if 'username' in session and username == session['username']:
+        utc_now = datetime.datetime.now(pytz.utc)
         cursor.execute('UPDATE users SET last_online=? WHERE login=?',
-                       (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), username))
+                       (utc_now.strftime('%Y-%m-%d %H:%M:%S'), username))
         conn.commit()
 
+    # Предполагаем, что время в базе данных хранится в UTC
     last_online_time = datetime.datetime.strptime(last_online_time, '%Y-%m-%d %H:%M:%S')
-    last_online_time = pytz.utc.localize(last_online_time).astimezone(pytz.timezone('Europe/Moscow'))
-    now = pytz.timezone('Europe/Moscow').localize(datetime.datetime.now())
+    last_online_time = pytz.utc.localize(last_online_time)
+
+    # Получаем текущее время в UTC
+    now = datetime.datetime.now(pytz.utc)
+    print(f"ВРЕМЯ СЕЙЧАС - {now}")
+
+    # Вычисляем разницу
     time_diff = now - last_online_time
 
     if time_diff < datetime.timedelta(minutes=5):
@@ -308,9 +315,11 @@ def profile(username):
     elif time_diff < datetime.timedelta(days=1):
         hours = time_diff.seconds // 3600
         last_online = f"Был в сети {pluralize_russian(hours, 'час', 'часа', 'часов')} назад"
-    else:
+    elif time_diff < datetime.timedelta(days=30):
         days = time_diff.days
         last_online = f"Был в сети {pluralize_russian(days, 'день', 'дня', 'дней')} назад"
+    else:
+        last_online = last_online_time.astimezone(pytz.timezone('Europe/Moscow')).strftime('%d.%m.%Y %H:%M по Москве')
 
     registered_datetime = datetime.datetime.strptime(registration_date, '%Y-%m-%d %H:%M:%S')
     days_registered = (datetime.datetime.now() - registered_datetime).days
