@@ -248,7 +248,7 @@ def send_post():
     post_content = request.form['post']
     thread_id = request.args.get('thread_id')
     if 'username' not in session:
-        return 'Вы должны быть авторизованы для отправки поста', 401
+        return render_template("register.html", title="Регистрация"), 401
 
     try:
         conn = sqlite3.connect("db.db")
