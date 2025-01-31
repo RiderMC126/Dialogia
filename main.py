@@ -281,41 +281,50 @@ def profile(username):
     update_online()
     conn = sqlite3.connect('db.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT avatar, last_online, role, registration_time FROM users WHERE login=?', (username,))
+    cursor.execute('SELECT avatar, last_online, role, registration_time, email FROM users WHERE login=?', (username,))
     user_data = cursor.fetchone()
-    if user_data is not None:
-        avatar = user_data[0]
-        last_online_time = user_data[1]
-        role = user_data[2]
-        registration_date = user_data[3]
-        if username == session['username']:
-            cursor.execute('UPDATE users SET last_online=? WHERE login=?',
-                           (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), username))
-            conn.commit()
-        last_online_time = datetime.datetime.strptime(last_online_time, '%Y-%m-%d %H:%M:%S')
-        last_online_time = pytz.utc.localize(last_online_time).astimezone(pytz.timezone('Europe/Moscow'))
-        now = pytz.timezone('Europe/Moscow').localize(datetime.datetime.now())
-        time_diff = now - last_online_time
-        if time_diff < datetime.timedelta(minutes=5):
-            last_online = "в сети"
-        elif time_diff < datetime.timedelta(hours=1):
-            last_online = f"Был в сети {time_diff.seconds // 60} минут назад"
-        elif time_diff < datetime.timedelta(days=1):
-            last_online = f"Был в сети {time_diff.seconds // 3600} часов назад"
-        else:
-            last_online = f"Был в сети {time_diff.days} дней назад"
 
-        # Вычисляем количество дней с момента регистрации
-        registered_datetime = datetime.datetime.strptime(registration_date, '%Y-%m-%d %H:%M:%S')
-        days_registered = (datetime.datetime.now() - registered_datetime).days
+    if user_data is None:
+        conn.close()
+        return render_template('404.html'), 404
+
+    avatar, last_online_time, role, registration_date, email = user_data
+
+    if 'username' in session and username == session['username']:
+        cursor.execute('UPDATE users SET last_online=? WHERE login=?',
+                       (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), username))
+        conn.commit()
+
+    last_online_time = datetime.datetime.strptime(last_online_time, '%Y-%m-%d %H:%M:%S')
+    last_online_time = pytz.utc.localize(last_online_time).astimezone(pytz.timezone('Europe/Moscow'))
+    now = pytz.timezone('Europe/Moscow').localize(datetime.datetime.now())
+    time_diff = now - last_online_time
+
+    if time_diff < datetime.timedelta(minutes=5):
+        last_online = "в сети"
+    elif time_diff < datetime.timedelta(hours=1):
+        last_online = f"Был в сети {time_diff.seconds // 60} минут назад"
+    elif time_diff < datetime.timedelta(days=1):
+        last_online = f"Был в сети {time_diff.seconds // 3600} часов назад"
     else:
-        avatar = None
-        last_online = None
-        role = None  # Добавляем None для роли
-        days_registered = None  # Добавляем None для дней регистрации
+        last_online = f"Был в сети {time_diff.days} дней назад"
+
+    registered_datetime = datetime.datetime.strptime(registration_date, '%Y-%m-%d %H:%M:%S')
+    days_registered = (datetime.datetime.now() - registered_datetime).days
 
     conn.close()
-    return render_template('profile.html', username=username, avatar=avatar, last_online=last_online, role=role, days_registered=days_registered)
+
+    is_own_profile = 'username' in session and username == session['username']
+
+    return render_template('profile.html',
+                           username=username,
+                           avatar=avatar,
+                           last_online=last_online,
+                           role=role,
+                           days_registered=days_registered,
+                           email=email,
+                           is_own_profile=is_own_profile)
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -464,12 +473,14 @@ def search_threads():
 
 
 # Обработка выхода из аккаунта
+
+
 @app.route('/logout')
 def logout():
-    write_to_log(message=f"Пользователь {session['username']} вышел из аккаунта", folder=LOG_FOLDER)
-    update_online()
-    session['logged_in'] = False
+    write_to_log(message=f"Пользователь {session.get('username', 'Unknown')} вышел из аккаунта", folder=LOG_FOLDER)
+    session.clear()  # Полностью очищаем сессию
     return redirect(url_for('index'))
+
 
 # Добавление пользователя в контекст шаблона
 @app.context_processor
