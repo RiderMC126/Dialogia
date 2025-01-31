@@ -220,7 +220,7 @@ def thread(thread_id):
 
     # Получаем посты для темы
     cursor.execute('''
-        SELECT p.content, p.name, p.created_at, u.avatar
+        SELECT p.content, p.name, p.created_at, COALESCE(u.avatar, 'none_avatar.png') as avatar
         FROM posts p
         LEFT JOIN users u ON p.user_id = u.id  
         WHERE p.thread_id = ?
@@ -228,16 +228,13 @@ def thread(thread_id):
     posts = cursor.fetchall()
 
     # Получаем аватарку текущего пользователя
+    avatar = 'none_avatar.png'
     if 'username' in session:
         username = session['username']
         cursor.execute('SELECT avatar FROM users WHERE login=?', (username,))
         avatar_result = cursor.fetchone()
         if avatar_result and avatar_result[0]:
             avatar = avatar_result[0]
-        else:
-            avatar = 'avatar_none.png'
-    else:
-        avatar = 'avatar_none.png'
 
     conn.close()
 
@@ -246,6 +243,7 @@ def thread(thread_id):
     else:
         return render_template('thread.html', thread=thread_data, posts=posts, avatar=avatar,
                                username=session.get('username', 'Гость'))
+
 
 
 # Маршрут для отправки поста
@@ -323,6 +321,8 @@ def profile(username):
 
     registered_datetime = datetime.datetime.strptime(registration_date, '%Y-%m-%d %H:%M:%S')
     days_registered = (datetime.datetime.now() - registered_datetime).days
+    if days_registered == 0:
+        days_registered = 1
 
     conn.close()
 

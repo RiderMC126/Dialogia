@@ -31,7 +31,11 @@
     <form action="{{ url_for('send_post', thread_id=thread[0]) }}" method="post">
     <div class="input_chat">
         {% if 'username' in session %}
-            <img class="post_avatar" src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка">
+            {% if avatar and avatar != 'none_avatar.png' %}
+                <img class="post_avatar" src="{{ url_for('static', filename='images/' + avatar) }}" alt="Аватарка">
+            {% else %}
+                <img class="post_avatar" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
+            {% endif %}
         {% else %}
             <img class="post_avatar" src="{{ url_for('static', filename='images/none_avatar.png') }}" alt="Аватарка">
         {% endif %}
@@ -39,6 +43,9 @@
         <button class="input_btn">Отправить</button>
     </div>
 </form>
+
+
+
 
 
 </div>
