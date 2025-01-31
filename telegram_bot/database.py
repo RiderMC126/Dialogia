@@ -20,6 +20,18 @@ def get_user_info():
 
     return user_list, user_count, admin_list, admin_count
 
+def get_user_list():
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT login FROM users')
+    users = cursor.fetchall()
+    user_list = "\n".join([user[0] for user in users])
+
+    conn.close()
+
+    return user_list
+
 
 def get_categories():
     conn = sqlite3.connect(DATABASE_URL)
@@ -49,6 +61,21 @@ def create_categories(name):
     finally:
         conn.close()
 
+def block_user_by_nickname(nickname):
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+    try:
+        cursor.execute('UPDATE users SET blocked = "YES" WHERE login = ?', (nickname,))
+        conn.commit()
+        if cursor.rowcount > 0:
+            return True
+        else:
+            return False
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return False
+    finally:
+        conn.close()
 
 def create_forums(category_id, name):
     conn = sqlite3.connect(DATABASE_URL)
@@ -75,5 +102,33 @@ def create_threads(forums_id, name):
     except sqlite3.Error as e:
         print(f"An error occurred: {e}")
         return None
+    finally:
+        conn.close()
+
+def get_blocked_user_list():
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT login FROM users WHERE blocked = "YES"')
+    users = cursor.fetchall()
+    user_list = "\n".join([user[0] for user in users])
+
+    conn.close()
+
+    return user_list
+
+def unblock_user_by_nickname(nickname):
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+    try:
+        cursor.execute('UPDATE users SET blocked = "NO" WHERE login = ?', (nickname,))
+        conn.commit()
+        if cursor.rowcount > 0:
+            return True
+        else:
+            return False
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return False
     finally:
         conn.close()

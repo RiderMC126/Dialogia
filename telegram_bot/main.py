@@ -8,7 +8,7 @@ from aiogram import Bot, Dispatcher, types, F, Router
 from aiogram.fsm.state import State, StatesGroup
 from config import TELEGRAM_BOT_TOKEN, admin_id, DATABASE_URL
 from keyboards.keyboards_admins import index_keyboard_admins, gohome_keyboard_admins, create_admins
-from database import get_user_info, create_categories, get_categories, create_forums, get_forums, create_threads
+from database import get_user_info, create_categories, get_categories, create_forums, get_forums, create_threads, block_user_by_nickname, get_user_list, get_blocked_user_list, unblock_user_by_nickname
 import logging
 import asyncio
 import sys
@@ -27,6 +27,9 @@ class Create(StatesGroup):
     forums = State()
     threads = State()
 
+class Users(StatesGroup):
+    blocked_nickname = State()
+    unblock_nickname = State()
 
 
 @dp.message(Command('start'))
@@ -76,7 +79,6 @@ async def categories_name(message: types.Message, state: FSMContext):
 
     await state.clear()
     await message.answer("Что дальше?", reply_markup=index_keyboard_admins())
-
 
 @dp.callback_query(F.data == "create_forums")
 async def create(callback: types.CallbackQuery, state: FSMContext):
@@ -142,11 +144,57 @@ async def threads_name(message: types.Message, state: FSMContext):
     await state.clear()
     await message.answer("Что дальше?", reply_markup=index_keyboard_admins())
 
+@dp.callback_query(F.data == "blocked_users")
+async def blocked_users(callback: types.CallbackQuery, state: FSMContext):
+    user_list = get_user_list()  # Новая функция
+    await bot.send_message(callback.message.chat.id, text=f"Список пользователей:\n{user_list}")
+    await bot.send_message(callback.message.chat.id, text="Напишите ник пользователя, которого нужно заблокировать:", reply_markup=gohome_keyboard_admins())
+    await callback.answer()
+    await state.set_state(Users.blocked_nickname)
 
 
+@dp.message(StateFilter(Users.blocked_nickname))
+async def block_user(message: types.Message, state: FSMContext):
+    nickname = message.text
+    result = block_user_by_nickname(nickname)  # Новая функция, которую нужно создать
+    if result:
+        await message.reply(f"Пользователь {nickname} успешно заблокирован.")
+    else:
+        await message.reply(
+            f"Не удалось заблокировать пользователя {nickname}. Возможно, пользователь не существует или уже заблокирован.")
+
+    await state.clear()
+    await message.answer("Что дальше?", reply_markup=index_keyboard_admins())
 
 
+@dp.callback_query(F.data == "unblocked_users")
+async def unblocked_users(callback: types.CallbackQuery, state: FSMContext):
+    blocked_user_list = get_blocked_user_list()
+    if blocked_user_list:
+        await bot.send_message(callback.message.chat.id,
+                               text=f"Список заблокированных пользователей:\n{blocked_user_list}")
+        await bot.send_message(callback.message.chat.id,
+                               text="Напишите ник пользователя, которого нужно разблокировать:",
+                               reply_markup=gohome_keyboard_admins())
+        await state.set_state(Users.unblock_nickname)
+    else:
+        await bot.send_message(callback.message.chat.id, text="Нет заблокированных пользователей.",
+                               reply_markup=gohome_keyboard_admins())
+    await callback.answer()
 
+
+@dp.message(StateFilter(Users.unblock_nickname))
+async def unblock_user(message: types.Message, state: FSMContext):
+    nickname = message.text
+    result = unblock_user_by_nickname(nickname)
+    if result:
+        await message.reply(f"Пользователь {nickname} успешно разблокирован.")
+    else:
+        await message.reply(
+            f"Не удалось разблокировать пользователя {nickname}. Возможно, пользователь не существует или уже разблокирован.")
+
+    await state.clear()
+    await message.answer("Что дальше?", reply_markup=index_keyboard_admins())
 
 
 async def main() -> None:

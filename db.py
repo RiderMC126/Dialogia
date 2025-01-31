@@ -13,7 +13,8 @@ def create_db():
         avatar TEXT,
         last_online DATETIME,
         registration_time DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-        role TEXT NOT NULL DEFAULT 'Пользователь'
+        role TEXT NOT NULL DEFAULT 'Пользователь',
+        blocked TEXT NOT NULL DEFAULT 'NO'
         )
     ''')
 
