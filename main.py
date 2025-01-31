@@ -473,11 +473,11 @@ def search_threads():
 
 
 # Обработка выхода из аккаунта
-
-
 @app.route('/logout')
 def logout():
     write_to_log(message=f"Пользователь {session.get('username', 'Unknown')} вышел из аккаунта", folder=LOG_FOLDER)
+    update_online()
+    #session['logged_in'] = False # Так было раньше
     session.clear()  # Полностью очищаем сессию
     return redirect(url_for('index'))
 
