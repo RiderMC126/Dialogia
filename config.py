@@ -11,5 +11,5 @@ admin_id = 502447701
 
 # BoostTelega
 
-bt_link = "https://boosttelega.online"
+bt_link = "https://boosttelega.online/api/v2"
 BT_API_KEY = "heJeyxWJLszVV2oAy4CPbcFOVWwXj14ZQoUZpYgbJfWHzDXMms5rMeAjKPrz"

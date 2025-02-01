@@ -2,6 +2,8 @@ from fastapi import FastAPI, Query
 from utils import *
 from typing import Optional
 import sqlite3
+import requests
+from config import bt_link, BT_API_KEY
 
 app = FastAPI()
 
@@ -114,8 +116,7 @@ cursor.execute('SELECT api_key FROM boosttelega')
 valid_keys = [row[0] for row in cursor.fetchall()]
 conn.close()
 
-# Список допустимых ключей
-valid_keys = []  # Загрузите ключи из базы данных
+
 
 @app.get("/api/v2")
 def api_v2(
@@ -139,10 +140,25 @@ def api_v2(
 
     # Создание заказа
     order_id = create_order(service, link, quantity)
-    if order_id:
-        return {"message": "Заказ создан", "order_id": order_id}
+    if order_id: #?action=add&service={services[service]['text']}&link={link}&quantity={quantity}&key={key}
+        bt_id = services[service]["bt_id"]
+        response = requests.get(f"{bt_link}", params={
+            'action': 'add',
+            'service': f'{services[service]["text"]}',
+            'link': f'{link}',
+            'quantity': f'{quantity}',
+            'key': f'{key}'
+        })
+        # Проверка кода состояния ответа
+        if response.status_code == 200:
+            print("Запрос успешно выполнен")
+            print(response.json())  # Вывод ответа от API
+        else:
+            print(f"Ошибка: {response.status_code}")
+        return {"message": "Заказ создан", "order_id": order_id, "bt_id": bt_id}
     else:
         return {"error": "Ошибка при создании заказа"}
+
 
 def create_order(service_id, link, quantity):
     # Логика создания заказа здесь
