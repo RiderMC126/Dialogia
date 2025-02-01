@@ -70,6 +70,15 @@ def create_db():
         );
     """)
 
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS boosttelega (
+        id INTEGER PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        api_key VARCHAR(255) NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    ''')
+
     conn.commit()
     conn.close()
 

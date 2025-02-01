@@ -165,9 +165,20 @@ def register():
                     local_time = local_time + datetime.timedelta(hours=3)
                     local_time = local_time.strftime('%Y-%m-%d %H:%M:%S')
 
+                    # Генерируем API-ключ
+                    api_key = generate_api_key()
+
+                    # Вставляем данные пользователя в таблицу users
                     cursor.execute(
                         'INSERT INTO users (login, password, email, role, registration_time) VALUES (?, ?, ?, ?, ?)',
                         (login, hashed_password, email, 'Пользователь', local_time))
+                    conn.commit()
+
+                    # Получаем ID только что зарегистрированного пользователя
+                    user_id = cursor.lastrowid
+
+                    # Вставляем API-ключ в таблицу bt_api
+                    cursor.execute('INSERT INTO boosttelega (user_id, api_key) VALUES (?, ?)', (user_id, api_key))
                     conn.commit()
                     conn.close()
 
@@ -180,6 +191,7 @@ def register():
                 captcha_text, _ = generate_captcha()
                 session['captcha_text'] = captcha_text
     return render_template('register.html', title=title, error=error)
+
 
 # Маршрут для отображения категории
 @app.route('/category/<int:category_id>')
@@ -474,10 +486,31 @@ def services():
     title = "Сервисы"
     return render_template('services.html', title=title)
 
+
 @app.route('/telegram-boost')
 def telegram_boost():
     title = "Telegram Boost"
-    return render_template("telegram-boost.html", title=title)
+    if 'username' in session:
+        username = session['username']
+        conn = sqlite3.connect('db.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT id FROM users WHERE login=?', (username,))
+        user_id = cursor.fetchone()[0]
+
+        cursor.execute('SELECT api_key FROM boosttelega WHERE user_id=?', (user_id,))
+        api_key = cursor.fetchone()
+
+        if api_key:
+            api_key = api_key[0]
+        else:
+            api_key = "API-ключ не найден"
+
+        conn.close()
+    else:
+        return redirect(url_for('login'))  # Если пользователь не авторизован, перенаправляем на страницу входа
+
+    return render_template("telegram-boost.html", title=title, api_key=api_key)
+
 
 @app.route('/create_order', methods=['POST'])
 def create_order():

@@ -6,6 +6,8 @@ import asyncio
 import sqlite3
 import datetime
 from datetime import datetime
+import secrets
+import string
 import sys
 import os
 
@@ -94,3 +96,9 @@ def update_user_balance(username, new_balance):
     cursor.execute('UPDATE users SET balance = ROUND(?, 2) WHERE login = ?', (new_balance, username))
     conn.commit()
     conn.close()
+
+
+def generate_api_key(length=32):
+    characters = string.ascii_letters + string.digits
+    api_key = ''.join(secrets.choice(characters) for _ in range(length))
+    return api_key
