@@ -10,6 +10,7 @@ def create_db():
         login TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
         email TEXT NOT NULL UNIQUE,
+        balance INTEGER NOT NULL DEFAULT 0,
         avatar TEXT,
         last_online DATETIME,
         registration_time DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),

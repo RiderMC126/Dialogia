@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/telegram-boost.css">
+    <title>{{ title }}</title>
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="container-parent">
+        <div class="container">
+            <div class="header">
+                <div class="card" id="new-order">
+                    <a>Новый заказ</a>
+                </div>
+                <div class="card" id="all-orders">
+                    <a>Все заказы</a>
+                </div>
+            </div>
+            <div class="content-container">
+                <div class="content" id="new-order-content">
+                    <!-- Контент для нового заказа -->
+                    <h2 class="select-service-text">Выберите услугу</h2>
+
+                    <h3 class="category-text">Категория</h3>
+                    <select id="SelectCategory"></select>
+
+                    <h3 class="category-text">Услуга</h3>
+                    <select id="SelectService"></select>
+
+                    <h3 class="category-text">Ссылка</h3>
+                    <input type="url" id="link" name="link" placeholder="https://t.me/example">
+
+                    <h3 class="category-text">Количество</h3>
+                    <input type="number" id="quantity" name="quantity" min="1" value="1">
+                    <p class="category-text">Минимальное количество: </p>
+
+                    <div class="create_zakaz">
+                        <h4 class="quantity-text">Количество - <span id="display-quantity">1</span></h4>
+                        <h4 class="price-text">Цена - <span id="display-price">0₽</span></h4>
+                        <button class="create_button">Создать заказ</button>
+                    </div>
+
+                        </div>
+                            <div class="content" id="all-orders-content" style="display: none;">
+                            <!-- Контент для всех заказов -->
+                            <h2>Все заказы</h2>
+                            <p>Содержимое для всех заказов</p>
+                        </div>
+                </div>
+            </div>
+
+        <div class="container-mini">
+            <div class="header">
+                <div class="category-id"></div>
+            </div>
+        </div>
+
+    </div>
+<script src="../static/js/telegram-boost.js"></script>
+
+</body>
+</html>

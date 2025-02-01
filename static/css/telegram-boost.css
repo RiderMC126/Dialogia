@@ -1,0 +1,121 @@
+.container-parent {
+    display: flex;
+}
+
+.container {
+    margin-right: -150px;
+    position: relative;
+    display: block;
+    background: #1a1a1a;
+    width: 30%;
+    height: 800px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-90%, 15%);
+    margin-bottom: 100px;
+    max-height: 2000px;
+    text-decoration: none;
+    border-radius: 12px;
+    bottom: 30px;
+}
+
+.container-mini {
+    bottom: 30px;
+    position: relative;
+    display: block;
+    background: #1a1a1a;
+    width: 20%;
+    height: 800px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-90%, 15%);
+    margin-bottom: 100px;
+    max-height: 2000px;
+    text-decoration: none;
+    border-radius: 12px;
+
+}
+
+.header {
+    position: relative;
+    width: 100%;
+    max-height: 350px;
+
+    display: inline-flex;
+}
+
+.header .card {
+    width: 150px;
+    height: 50px;
+    margin-bottom: 25px;
+}
+
+.card {
+    cursor: pointer;
+    position: relative;
+    background: #3a3a3ad0;
+    width: 250px;
+    height: 70px;
+    top: 15px;
+    margin-left: 20px;
+    border-radius: 20px;
+    text-align: center;
+    justify-content: center; /* Центрирует по горизонтали */
+    align-items: center; /* Центрирует по вертикали */
+    display: inline-flex;
+    text-decoration: none;
+}
+
+.content-container {
+    padding: 20px;
+}
+
+.content {
+    display: block;
+}
+
+.select-service-text {
+    margin-top: -5px;
+    color: white;
+}
+
+.category-text {
+    margin-bottom: 5px;
+    color: white;
+}
+
+.container-mini .header {
+    height: 75px;
+}
+
+.category-id {
+    color: white;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quantity-text, .price-text {
+    margin-bottom: 5px;
+    color: white;
+    margin-left: 10px;
+}
+
+.create_zakaz {
+    position: relative;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3a3a3ad0;
+    width: 80%;
+    height: 120px;
+}
+
+.create_button {
+    position: relative;
+    top: 30%;
+    width: 100%;
+}

@@ -472,6 +472,10 @@ def services():
     title = "Сервисы"
     return render_template('services.html', title=title)
 
+@app.route('/telegram-boost')
+def telegram_boost():
+    title = "Telegram Boost"
+    return render_template("telegram-boost.html", title=title)
 
 @app.route("/admin-panel")
 def admin_panel():
@@ -495,8 +499,6 @@ def admin_panel():
         return render_template('admin_panel.html', title=title, user_count=user_count)
     else:
         return render_template("403.html"), 403  # Если пользователь не является администратором, показываем ошибку 403
-
-
 
 @app.route('/search_threads')
 def search_threads():
