@@ -547,7 +547,6 @@ def change_api_token():
         return jsonify({'error': 'Пользователь не найден'}), 404
 
 
-
 @app.route('/create_order', methods=['POST'])
 def create_order():
     if 'username' not in session:
