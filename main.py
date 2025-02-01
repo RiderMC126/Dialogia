@@ -508,7 +508,7 @@ def create_order():
         return jsonify({'error': 'Недостаточно средств на балансе'}), 400
 
     # Снимаем средства с баланса
-    new_balance = current_balance - price
+    new_balance = round(current_balance - price, 2)
     update_user_balance(username, new_balance)
 
     # Создаем заказ через API
@@ -520,7 +520,7 @@ def create_order():
         response_data = response.json()
 
         if response_data.get('order'):
-            return jsonify({'message': 'Заказ успешно создан', 'order_id': response_data['order'], 'new_balance': new_balance}), 200
+            return jsonify({'message': 'Заказ успешно создан', 'order_id': response_data['order'], 'new_balance': f"{new_balance:.2f}"}), 200
         else:
             # Если заказ не создан, возвращаем средства
             update_user_balance(username, current_balance)

@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (data.error) {
             alert(data.error);
           } else {
-            alert(`Заказ успешно создан! ID заказа: ${data.order_id}. Новый баланс: ${data.new_balance}₽`);
+            console.log("Всё супер")
           }
         })
         .catch(error => {

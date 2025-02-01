@@ -91,6 +91,6 @@ def get_user_balance(username):
 def update_user_balance(username, new_balance):
     conn = sqlite3.connect('db.db')
     cursor = conn.cursor()
-    cursor.execute('UPDATE users SET balance = ? WHERE login = ?', (new_balance, username))
+    cursor.execute('UPDATE users SET balance = ROUND(?, 2) WHERE login = ?', (new_balance, username))
     conn.commit()
     conn.close()
