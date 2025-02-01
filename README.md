@@ -19,7 +19,7 @@
   <li>Запускаете телеграмм бота: <blockquote>/telegram_bot/main.py</blockquote></li>
 </ol>
 
-# Дополнительно
+# ⚙️ Дополнительно
 <ul>
   <li>Не забудьте вписать свой API-KEY в telegram-boost.js</li>
 </ul>
