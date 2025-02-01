@@ -363,3 +363,30 @@ function copyToClipboard(element) {
   alert('API-token скопирован в буфер обмена!');
 }
 
+document.getElementById('changeTokenButton').addEventListener('click', function() {
+    fetch('/change_api_token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            alert(`Новый API-ключ: ${data.api_key}`);
+            // Обновите текст API-ключа, не удаляя кнопку
+            const copyableDiv = document.getElementById('copyableDiv');
+            copyableDiv.innerHTML = data.api_key + '<img style="width: 20px; height: 20px; left: 430px; top:110px ;position: fixed; cursor: pointer" src="../static/images/icon_copy.png">';
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Произошла ошибка при смене API-ключа.');
+    });
+});
+
+
+

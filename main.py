@@ -511,6 +511,42 @@ def telegram_boost():
 
     return render_template("telegram-boost.html", title=title, api_key=api_key)
 
+@app.route('/change_api_token', methods=['POST'])
+def change_api_token():
+    if 'username' not in session:
+        return jsonify({'error': 'Пользователь не авторизован'}), 401
+
+    username = session['username']
+    conn = sqlite3.connect('db.db')
+    cursor = conn.cursor()
+
+    # Получаем ID пользователя
+    cursor.execute('SELECT id FROM users WHERE login=?', (username,))
+    user_id = cursor.fetchone()
+
+    # Генерируем новый API-ключ
+    new_api_key = generate_api_key()
+
+    if user_id:
+        # Проверяем, есть ли уже запись в boosttelega
+        cursor.execute('SELECT * FROM boosttelega WHERE user_id=?', (user_id[0],))
+        existing_record = cursor.fetchone()
+
+        if existing_record:
+            # Обновляем существующую запись
+            cursor.execute('UPDATE boosttelega SET api_key=? WHERE user_id=?', (new_api_key, user_id[0]))
+        else:
+            # Создаем новую запись
+            cursor.execute('INSERT INTO boosttelega (user_id, api_key) VALUES (?, ?)', (user_id[0], new_api_key))
+
+        conn.commit()
+        conn.close()
+        return jsonify({'api_key': new_api_key}), 200
+    else:
+        conn.close()
+        return jsonify({'error': 'Пользователь не найден'}), 404
+
+
 
 @app.route('/create_order', methods=['POST'])
 def create_order():
