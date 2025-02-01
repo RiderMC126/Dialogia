@@ -258,6 +258,36 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
+    // Рассчитать общую стоимость
+    const totalPrice = (service.price * quantity).toFixed(2);
+
+    // Отправить данные на сервер
+    fetch('/create_order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        service_id: service.bt_id,
+        link: link,
+        quantity: quantity,
+        price: totalPrice
+      }),
+    })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            alert(`Заказ успешно создан! ID заказа: ${data.order_id}. Новый баланс: ${data.new_balance}₽`);
+          }
+        })
+        .catch(error => {
+          console.error('Ошибка:', error);
+          alert('Произошла ошибка при отправке запроса.');
+        });
+
+
     // Ваш API-ключ
     const apiKey = 'heJeyxWJLszVV2oAy4CPbcFOVWwXj14ZQoUZpYgbJfWHzDXMms5rMeAjKPrz'; // Замените на ваш реальный API-ключ
 

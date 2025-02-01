@@ -76,3 +76,21 @@ def pluralize_russian(number, one, few, many):
         return f"{number} {few}"
     else:
         return f"{number} {many}"
+
+
+# Функция для получения баланса пользователя
+def get_user_balance(username):
+    conn = sqlite3.connect('db.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT balance FROM users WHERE login = ?', (username,))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else 0
+
+# Функция для обновления баланса пользователя
+def update_user_balance(username, new_balance):
+    conn = sqlite3.connect('db.db')
+    cursor = conn.cursor()
+    cursor.execute('UPDATE users SET balance = ? WHERE login = ?', (new_balance, username))
+    conn.commit()
+    conn.close()

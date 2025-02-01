@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g, jsonify, flash
 from fastapi import FastAPI
+from urllib.parse import quote
 from starlette.middleware.wsgi import WSGIMiddleware
 from werkzeug.utils import secure_filename
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -16,6 +17,7 @@ import pytz
 import sys
 import os
 import logging
+import requests
 from logging.handlers import RotatingFileHandler
 import asyncio
 import threading
@@ -476,6 +478,60 @@ def services():
 def telegram_boost():
     title = "Telegram Boost"
     return render_template("telegram-boost.html", title=title)
+
+@app.route('/create_order', methods=['POST'])
+def create_order():
+    if 'username' not in session:
+        return jsonify({'error': 'Пользователь не авторизован'}), 401
+
+    username = session['username']
+    data = request.json
+    service_id = data.get('service_id')
+    link = data.get('link')
+    quantity = data.get('quantity')
+    price = data.get('price')  # Общая стоимость заказа
+
+    if not all([service_id, link, quantity, price]):
+        return jsonify({'error': 'Не все данные предоставлены'}), 400
+
+    # Преобразуйте цену в float
+    try:
+        price = float(price)
+    except ValueError:
+        return jsonify({'error': 'Неправильный формат цены'}), 400
+
+    # Получаем текущий баланс пользователя
+    current_balance = get_user_balance(username)
+
+    # Проверяем, достаточно ли средств
+    if current_balance < price:
+        return jsonify({'error': 'Недостаточно средств на балансе'}), 400
+
+    # Снимаем средства с баланса
+    new_balance = current_balance - price
+    update_user_balance(username, new_balance)
+
+    # Создаем заказ через API
+    api_key = 'heJeyxWJLszVV2oAy4CPbcFOVWwXj14ZQoUZpYgbJfWHzDXMms5rMeAjKPrz'
+    api_url = f'https://boosttelega.online/api/v2?action=add&service={service_id}&link={quote(link)}&quantity={quantity}&key={api_key}'
+
+    try:
+        response = requests.get(api_url)
+        response_data = response.json()
+
+        if response_data.get('order'):
+            return jsonify({'message': 'Заказ успешно создан', 'order_id': response_data['order'], 'new_balance': new_balance}), 200
+        else:
+            # Если заказ не создан, возвращаем средства
+            update_user_balance(username, current_balance)
+            return jsonify({'error': 'Ошибка при создании заказа'}), 500
+
+    except Exception as e:
+        # В случае ошибки возвращаем средства
+        update_user_balance(username, current_balance)
+        return jsonify({'error': str(e)}), 500
+
+
 
 @app.route("/admin-panel")
 def admin_panel():
