@@ -325,4 +325,21 @@ document.addEventListener('DOMContentLoaded', function() {
     newOrderContent.style.display = 'none';
     allOrdersContent.style.display = 'block';
   });
+
+  // Код для кнопки "API"
+  const checkApiCard = document.getElementById('check-api');
+  const apiContent = document.getElementById('api-content');
+
+  checkApiCard.addEventListener('click', function() {
+    // Скрыть другие контенты
+    newOrderContent.style.display = 'none';
+    allOrdersContent.style.display = 'none';
+
+    // Показать контент для API
+    apiContent.style.display = 'block';
+  });
+
+
+
+
 });
