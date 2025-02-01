@@ -18,3 +18,8 @@
   <li>Запускаете сервер: <blockquote>ngrok http 5000</blockquote></li>
   <li>Запускаете телеграмм бота: <blockquote>/telegram_bot/main.py</blockquote></li>
 </ol>
+
+# Дополнительно
+<ul>
+  <li>Не забудьте вписать свой API-KEY в telegram-boost.js</li>
+</ul>
