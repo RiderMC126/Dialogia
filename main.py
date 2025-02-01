@@ -471,7 +471,21 @@ def services():
 
 @app.route("/admin-panel")
 def admin_panel():
-    title = "Admin Panel"
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Если пользователь не авторизован, перенаправляем на страницу входа
+
+    conn = sqlite3.connect('db.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT role FROM users WHERE login=?', (session['username'],))
+    user_role = cursor.fetchone()
+    conn.close()
+
+    if user_role and user_role[0] == 'Администратор':
+        title = "Admin Panel"
+        return render_template('admin_panel.html', title=title)
+    else:
+        return render_template("403.html"), 403  # Если пользователь не является администратором, показываем ошибку 403
+
 
 
 @app.route('/search_threads')
