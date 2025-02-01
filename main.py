@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g, jsonify, flash
+from fastapi import FastAPI
+from starlette.middleware.wsgi import WSGIMiddleware
 from werkzeug.utils import secure_filename
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from telegram_bot.database import get_user_info
@@ -21,6 +23,7 @@ import threading
 
 # Инициализация приложения Flask
 app = Flask(__name__)
+fastapi_app = FastAPI()
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = "static/images/"
 LOG_FOLDER = 'logs'
@@ -548,6 +551,7 @@ if __name__ == '__main__':
     try:
         # Код запуска вашего сервера
         app.run(debug=True, host="0.0.0.0", port=5000)
+        #app.wsgi_app = WSGIMiddleware(fastapi_app ,app.wsgi_app)
     except Exception as e:
         write_to_serverlog(f'Ошибка при запуске сервера: {e}', SERVER_LOG_FOLDER)
     finally:
