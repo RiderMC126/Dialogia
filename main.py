@@ -469,6 +469,11 @@ def services():
     return render_template('services.html', title=title)
 
 
+@app.route("/admin-panel")
+def admin_panel():
+    title = "Admin Panel"
+
+
 @app.route('/search_threads')
 def search_threads():
     query = request.args.get('query', '')
