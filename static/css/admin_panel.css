@@ -1,0 +1,85 @@
+.admin-panel_box {
+    position: relative;
+    display: block;
+    background: #1a1a1a;
+    width: 80%;
+    min-height: 700px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 15%);
+    margin-bottom: 100px;
+    max-height: 2000px;
+    text-decoration: none;
+    border-radius: 12px;
+}
+
+.sidebar {
+    position: fixed;
+    width: 150px; /* Ширина боковой панели */
+    height: 660px; /* Высота боковой панели */
+    background-color: #333; /* Фон боковой панели */
+    padding: 20px; /* Внутренние отступы */
+    overflow: hidden;
+    border-right: 1px solid white;
+}
+
+.sidebar ul {
+    list-style: none; /* Удаляем маркеры списка */
+    padding: 0; /* Удаляем отступы */
+    margin: 0; /* Удаляем внешние отступы */
+}
+
+.sidebar li {
+    padding: 10px; /* Внутренние отступы для элементов списка */
+    margin-top: -5px;
+    color: white;
+}
+
+.sidebar a {
+    text-decoration: none; /* Удаляем подчеркивание ссылок */
+    color: #fff; /* Цвет текста ссылок */
+}
+
+.sidebar hr {
+    position: relative;
+    width: 200%; /* Устанавливаем ширину линии на 100% */
+    border: none; /* Удаляем стандартные границы */
+    border-top: 1px solid #fff; /* Устанавливаем цвет и стиль линии */
+    right: 20px /* Добавляем отступы сверху и снизу */
+}
+
+.hr-sidebar {
+    position: relative;
+}
+
+.hr-sidebar2 {
+    position: relative;
+    top: 52px;
+}
+
+.content{
+    position: relative;
+    top: -30px;
+}
+
+.card {
+    position: relative;
+    padding: 30px 5px;
+    top: 50px;
+    left: 300px;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #555; /* Темная граница */
+    text-align: center;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); /* Темная тень */
+    background: dimgray; /* Темный фон */
+    color: #fff; /* Белый текст */
+    span {
+        opacity: 0.6;
+    }
+}
+
+
+
+
+

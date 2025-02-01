@@ -1,17 +1,38 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/admin_panel.css">
+
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap-extended.min.css">
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/fonts/simple-line-icons/style.min.css">
     <title>{{ title }}</title>
 </head>
 <body>
 {% include 'header.html' %}
 
-
+    <div class="admin-panel_box">
+        <div class="sidebar">
+            <ul>
+                <li>Dashboard</li>
+                <hr>
+                <li>Soon...</li>
+                <hr>
+            </ul>
+        </div>
+        <div id="app">
+          <div class="content">
+            <div class="card">
+                <img style="width: 21px; height: 21px; position: relative; top: 5px" src="../static/images/user.png">
+                <a>Пользователи: {{ user_count }}</a>
+            </div>
+          </div>
+        </div>
+    </div>
 
 </body>
 </html>

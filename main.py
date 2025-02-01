@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g, jsonify, flash
 from werkzeug.utils import secure_filename
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from telegram_bot.database import get_user_info
 import sqlite3
 import hashlib
 from capcha import generate_captcha
@@ -481,8 +482,14 @@ def admin_panel():
     conn.close()
 
     if user_role and user_role[0] == 'Администратор':
+        conn = sqlite3.connect('db.db')
+        cursor = conn.cursor()
+
+        cursor.execute('SELECT login FROM users')
+        users = cursor.fetchall()
+        user_count = len(users)
         title = "Admin Panel"
-        return render_template('admin_panel.html', title=title)
+        return render_template('admin_panel.html', title=title, user_count=user_count)
     else:
         return render_template("403.html"), 403  # Если пользователь не является администратором, показываем ошибку 403
 
