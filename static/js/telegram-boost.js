@@ -338,8 +338,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Показать контент для API
     apiContent.style.display = 'block';
   });
-
-
-
-
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  const copyButton = document.querySelector('#copyableDiv img');
+
+  copyButton.addEventListener('click', function(event) {
+    event.stopPropagation(); // Чтобы не срабатывал обработчик клика на родительском элементе
+    copyToClipboard(document.getElementById('copyableDiv'));
+  });
+});
+
+function copyToClipboard(element) {
+  const text = element.textContent;
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'absolute';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+  alert('API-token скопирован в буфер обмена!');
+}
+
