@@ -581,7 +581,7 @@ def create_order():
     update_user_balance(username, new_balance)
 
     # Создаем заказ через API
-    api_key = 'heJeyxWJLszVV2oAy4CPbcFOVWwXj14ZQoUZpYgbJfWHzDXMms5rMeAjKPrz'
+    api_key = ''
     api_url = f'https://boosttelega.online/api/v2?action=add&service={service_id}&link={quote(link)}&quantity={quantity}&key={api_key}'
 
     try:
