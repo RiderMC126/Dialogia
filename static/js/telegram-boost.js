@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // Ваш API-ключ
-    const apiKey = 'heJeyxWJLszVV2oAy4CPbcFOVWwXj14ZQoUZpYgbJfWHzDXMms5rMeAjKPrz'; // Замените на ваш реальный API-ключ
+    const apiKey = ''; // Замените на ваш реальный API-ключ
 
     // Формирование URL для запроса
     const apiUrl = `https://boosttelega.online/api/v2?action=add&service=${service.bt_id}&link=${encodeURIComponent(link)}&quantity=${quantity}&key=${apiKey}`;
