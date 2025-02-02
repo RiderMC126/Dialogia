@@ -67,10 +67,42 @@
                                         {{ api_key }}
                                         <img style="width: 20px; height: 20px; left: 430px; top:110px ;position: fixed; cursor: pointer" src="../static/images/icon_copy.png">
                                         <button id="changeTokenButton" style="position: relative; top: 50px; width: 100%">Сменить токен</button>
+                                    </div>
 
+                                    <div class="docs_container">
+                                    <h2>Создание заказа</h2>
+                                    <p>Пример запроса</p>
+                                    <div class="your_api_token">
+                                        http://127.0.0.1:5000/api/v2/create_order?id=1&link=instagram.com/instagram&quantity=100&key=yourKey
+                                    </div>
+                                    <p>Пример ответа</p>
+                                    <div class="your_api_token">
+                                        {"order": 1,
+                                        "external_order": 1234567
+                                        }
                                     </div>
                                 </div>
 
+                                <div class="docs_container">
+                                    <h2>Получение списка услуг</h2>
+                                    <p>Пример запроса</p>
+                                    <div class="your_api_token">
+                                        http://127.0.0.1:5000/api/v2/list_of_services?action=services&key=yourKey
+                                    </div>
+                                    <p>Пример ответа</p>
+                                    <div class="your_api_token">
+                                        {
+                                            "bt_id": 207,<br>
+                                            "description": "Описание",<br>
+                                            "minimum": 1,<br>
+                                            "price": 0.2,<br>
+                                            "price_text": "200\u20bd \u0437\u0430 1000",<br>
+                                            "text": "\ud83e\udd16 BOT START RU"
+                                          }
+                                    </div>
+                                </div>
+
+                                </div>
 
 
                             </div>

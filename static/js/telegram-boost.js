@@ -319,11 +319,13 @@ document.addEventListener('DOMContentLoaded', function() {
   newOrderCard.addEventListener('click', function() {
     newOrderContent.style.display = 'block';
     allOrdersContent.style.display = 'none';
+    apiContent.style.display = 'none';
   });
 
   allOrdersCard.addEventListener('click', function() {
     newOrderContent.style.display = 'none';
     allOrdersContent.style.display = 'block';
+    apiContent.style.display = 'none';
   });
 
   // Код для кнопки "API"

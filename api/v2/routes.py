@@ -89,4 +89,42 @@ def create_order():
     return jsonify({"order": order["id"], "external_order": external_order_response}), 200
 
 
+@v2_blueprint.route('/list_of_services', methods=['GET'])
+def list_of_services():
+    action = request.args.get('action')
+    key = request.args.get('key')
+
+    # Выводим все параметры запроса для отладки
+    print(f"Все параметры запроса: {request.args}")
+
+    # Проверяем, что ключ передан
+    if not key or not action:
+        return jsonify({"error": "Missing parameters"}), 400
+
+    # Проверяем API-ключ в базе данных
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Выполняем запрос к базе данных
+    cursor.execute('SELECT * FROM boosttelega WHERE api_key = ?', (key,))
+    user = cursor.fetchone()
+    conn.close()
+
+    print(f"Введенный ключ: {key}")
+    if user:
+        print(f"Ключ из БД: {user['api_key']}")  # Выведите ключ из базы данных
+    else:
+        print("Ключ не найден в БД")
+
+    # Если ключ не найден
+    if not user:
+        return jsonify({"error": "Invalid API key"}), 401
+
+    # Проверяем действие
+    if action != 'services':
+        return jsonify({"error": "Invalid action"}), 400
+
+    # Возвращаем список услуг
+    return jsonify(list(services.values())), 200
+
 
