@@ -677,7 +677,7 @@ if __name__ == '__main__':
     write_to_serverlog("Сервер запущен!", SERVER_LOG_FOLDER)
     try:
         # Код запуска вашего сервера
-        app.run(debug=True, host="127.0.0.1", port=5000)
+        app.run(debug=True, host="0.0.0.0", port=5000)
         #app.wsgi_app = WSGIMiddleware(fastapi_app ,app.wsgi_app)
     except Exception as e:
         write_to_serverlog(f'Ошибка при запуске сервера: {e}', SERVER_LOG_FOLDER)
