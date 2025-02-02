@@ -12,6 +12,7 @@ from config import *
 from utils import *
 from db import create_db
 from ai_bot import generate_response
+from api.v2.routes import v2_blueprint
 import datetime
 import pytz
 import sys
@@ -25,7 +26,7 @@ import threading
 
 # Инициализация приложения Flask
 app = Flask(__name__)
-fastapi_app = FastAPI()
+app.register_blueprint(v2_blueprint, url_prefix='/api/v2')
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = "static/images/"
 LOG_FOLDER = 'logs'
@@ -682,5 +683,3 @@ if __name__ == '__main__':
         write_to_serverlog(f'Ошибка при запуске сервера: {e}', SERVER_LOG_FOLDER)
     finally:
         write_to_serverlog('Сервер остановлен', SERVER_LOG_FOLDER)
-
-

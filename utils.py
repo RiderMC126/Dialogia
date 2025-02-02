@@ -6,6 +6,7 @@ import asyncio
 import sqlite3
 import datetime
 from datetime import datetime
+import requests
 import secrets
 import string
 import sys
@@ -102,3 +103,10 @@ def generate_api_key(length=32):
     characters = string.ascii_letters + string.digits
     api_key = ''.join(secrets.choice(characters) for _ in range(length))
     return api_key
+
+
+# Функция для подключения к базе данных
+def get_db_connection():
+    conn = sqlite3.connect('db.db')
+    conn.row_factory = sqlite3.Row  # Возвращает строки в виде словаря
+    return conn
